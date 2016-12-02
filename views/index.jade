@@ -1,0 +1,61 @@
+!!! 5
+html(lang="en", manifest="manifest.appcache")
+  head
+    meta(charset="UTF-8")
+
+    title ROTOGAMEsq
+
+    meta(name="description", content=description)
+    meta(name="author", content=author)
+    link(rel="author", href=repository.url)
+    link(rel="icon", href="/favicon.ico")
+
+    //- For displaying an image when sharing on Facebook, for example.
+    link(rel="image_src", href="/images/icon_256.png")
+
+    if env == 'development'
+      link(rel="stylesheet", href="/app/stylesheets/index.css")
+      script(data-main="/app/client/main", src="/app/client/vendor/require.js")
+    else
+      link(rel="stylesheet", href="/app.build/stylesheets/index.css")
+      script(src="/app.build/client/main.js", async)
+
+    meta(name="HandheldFriendly", content="True")
+
+    //- For iOS: disables zoom, enables optional full screen, specifies icon
+    meta(name="viewport",
+         content="initial-scale=1, maximum-scale=1, user-scalable=0")
+    meta(name="apple-mobile-web-app-capable", content="yes")
+    meta(name="apple-mobile-web-app-status-bar-style", content="black")
+    link(rel="apple-touch-icon-precomposed", href="/images/icon_256.png")
+
+    include google_analytics.html
+
+  body
+    h1(id="title")
+      | ROTOGAME
+      em sq
+
+    #display
+      canvas(id="tilesCanvas")
+      canvas(id="arrowCanvas")
+      canvas(id="rotAnimCanvas")
+      canvas(id="rubberBandCanvas")
+
+    #boardsNavigator
+
+    #rotationsNavigator
+      button.undo(disabled) 
+      span#nRotations
+      button.redo(disabled) 
+      button.reset 
+
+    #hiscoresTableGroup
+      table
+        tbody
+      table.cont
+        tbody
+
+    #loadScreen
+      div
+        div.spinner
