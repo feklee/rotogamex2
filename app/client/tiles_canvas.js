@@ -71,8 +71,20 @@ define([
         }
     };
 
+    var aSelectedTileConnectsToBottom = function () {
+        // TODO:
+        console.log(selectedRectT[0], selectedRectT[1]);
+        console.log(tiles[0][0]);
+
+        // TODO: check by column, step by step
+
+        return false;
+    };
+
     var onRubberBandDragEnd = function () {
-        if (rotation !== undefined && rotation.makesSense &&
+        if (rotation !== undefined &&
+                !aSelectedWhiteTileConnectsToBottom() &&
+                rotation.makesSense &&
                 !boards.selected.isFinished) {
             boards.selected.rotate(rotation);
         }
