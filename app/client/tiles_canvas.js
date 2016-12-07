@@ -71,37 +71,48 @@ define([
         }
     };
 
-    var tileConnectsToBottom = function (xT, yT) {
-        if (yT >= tiles.heightT) {
+    var tileConnectsToBorder = function (xT, yT, color, direction) {
+        var tileIsOutside = yT >= tiles.heightT || yT < 0;
+
+        if (tileIsOutside) {
             return true;
         }
 
-        console.log("fixme", xT, yT, tiles[xT][yT].color);
+        console.log("fixme", xT, yT);
 
-        return (tiles[xT][yT].color === "rgb(255,255,255)") &&
-            tileConnectsToBottom(xT, yT + 1);
+        return (tiles[xT][yT].color === color) &&
+            tileConnectsToBorder(xT, yT + direction, color, direction);
     };
 
-    var aTileConnectsToBottom = function (leftXT, rightXT, bottomYT) {
-        // TODO:
-        console.log(leftXT, rightXT, bottomYT);
-        console.log(tiles[0][0]);
-
+    var aTileConnectsToBorder = function (leftXT, rightXT, yT, color,
+                                          direction) {
         if (leftXT > rightXT) {
             return false;
         }
 
-        return tileConnectsToBottom(leftXT, bottomYT) ||
-            aTileConnectsToBottom(leftXT + 1, rightXT, bottomYT);
+        return tileConnectsToBorder(leftXT, yT, color, direction) ||
+            aTileConnectsToBorder(leftXT + 1, rightXT, yT, color, direction);
+    };
+
+    var aTileConnectsToBottom = function (leftXT, rightXT, bottomYT) {
+        return aTileConnectsToBorder(leftXT, rightXT, bottomYT,
+                                     "rgb(255,0,255)", 1);
+    };
+
+    var aTileConnectsToTop = function (leftXT, rightXT, topYT) {
+        return aTileConnectsToBorder(leftXT, rightXT, topYT,
+                                     "rgb(0,255,0)", -1);
     };
 
     var onRubberBandDragEnd = function () {
         var leftXT = selectedRectT[0][0];
+        var topYT = selectedRectT[0][1];
         var rightXT = selectedRectT[1][0];
         var bottomYT = selectedRectT[1][1];
 
         if (rotation !== undefined &&
-                !aTileConnectsToBottom(leftXT, rightXT, bottomYT) &&
+//                !aTileConnectsToBottom(leftXT, rightXT, bottomYT) &&
+                !aTileConnectsToTop(leftXT, rightXT, topYT) &&
                 rotation.makesSense &&
                 !boards.selected.isFinished) {
             boards.selected.rotate(rotation);
