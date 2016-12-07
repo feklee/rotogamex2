@@ -71,19 +71,37 @@ define([
         }
     };
 
-    var aSelectedTileConnectsToBottom = function () {
+    var tileConnectsToBottom = function (xT, yT) {
+        if (yT >= tiles.heightT) {
+            return true;
+        }
+
+        console.log("fixme", xT, yT, tiles[xT][yT].color);
+
+        return (tiles[xT][yT].color === "rgb(255,255,255)") &&
+            tileConnectsToBottom(xT, yT + 1);
+    };
+
+    var aTileConnectsToBottom = function (leftXT, rightXT, bottomYT) {
         // TODO:
-        console.log(selectedRectT[0], selectedRectT[1]);
+        console.log(leftXT, rightXT, bottomYT);
         console.log(tiles[0][0]);
 
-        // TODO: check by column, step by step
+        if (leftXT > rightXT) {
+            return false;
+        }
 
-        return false;
+        return tileConnectsToBottom(leftXT, bottomYT) ||
+            aTileConnectsToBottom(leftXT + 1, rightXT, bottomYT);
     };
 
     var onRubberBandDragEnd = function () {
+        var leftXT = selectedRectT[0][0];
+        var rightXT = selectedRectT[1][0];
+        var bottomYT = selectedRectT[1][1];
+
         if (rotation !== undefined &&
-                !aSelectedWhiteTileConnectsToBottom() &&
+                !aTileConnectsToBottom(leftXT, rightXT, bottomYT) &&
                 rotation.makesSense &&
                 !boards.selected.isFinished) {
             boards.selected.rotate(rotation);
