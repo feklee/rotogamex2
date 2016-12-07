@@ -78,8 +78,6 @@ define([
             return true;
         }
 
-        console.log("fixme", xT, yT);
-
         return (tiles[xT][yT].color === color) &&
             tileConnectsToBorder(xT, yT + direction, color, direction);
     };
@@ -111,7 +109,7 @@ define([
         var bottomYT = selectedRectT[1][1];
 
         if (rotation !== undefined &&
-//                !aTileConnectsToBottom(leftXT, rightXT, bottomYT) &&
+                !aTileConnectsToBottom(leftXT, rightXT, bottomYT) &&
                 !aTileConnectsToTop(leftXT, rightXT, topYT) &&
                 rotation.makesSense &&
                 !boards.selected.isFinished) {
