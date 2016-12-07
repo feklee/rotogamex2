@@ -1,4 +1,7 @@
-WIP
+Introduction
+============
+
+ROTOGAMEx2 is a two player variant of [ROTOGAMEsq][2].
 
 
 Legal
@@ -14,3 +17,4 @@ Hocevar. See the COPYING file for more details.
 
 
 [1]: mailto:felix.klee@inka.de
+[2]: https://github.com/feklee/rotogamesq
