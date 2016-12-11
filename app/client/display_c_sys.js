@@ -8,8 +8,8 @@ define(["boards"], function (boards) {
     "use strict";
 
     var tileSideLen = 0;
+    var fixedTileSideLen = 0;
     var spacing = 0;
-    var spacingIsDisabled = false;
     var board;
     var sideLen;
 
@@ -18,10 +18,9 @@ define(["boards"], function (boards) {
 
         if (board !== undefined) {
             sideLenT = board.sideLenT;
-            spacing = spacingIsDisabled
-                ? 0
-                : 0.05 * sideLen / sideLenT;
+            spacing = 0.05 * sideLen / sideLenT;
             tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
+            fixedTileSideLen = sideLen / sideLenT;
         }
     };
 
@@ -41,9 +40,11 @@ define(["boards"], function (boards) {
         }},
 
         // Converts tile position to screen position.
-        posFromPosT: {value: function (posT) {
+        posFromPosT: {value: function (posT, tileIsFixed = false) {
             return posT.map(function (coordT) {
-                return coordT * (tileSideLen + spacing) + spacing;
+                var s = tileIsFixed ? 0 : spacing;
+                var l = tileIsFixed ? fixedTileSideLen : tileSideLen;
+                return coordT * (l + s) + s;
             });
         }},
 
@@ -84,12 +85,12 @@ define(["boards"], function (boards) {
             });
         }},
 
-        tileSideLen: {get: function () {
-            return tileSideLen;
+        fixedTileSideLen: {get: function () {
+            return fixedTileSideLen;
         }},
 
-        spacing: {get: function () {
-            return spacing;
+        tileSideLen: {get: function () {
+            return tileSideLen;
         }},
 
         disableSpacing: {value: function () {

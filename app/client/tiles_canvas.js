@@ -46,10 +46,6 @@ define([
         return board === undefined || board !== boards.selected;
     };
 
-    var onRubberBandDragStart = function () {
-        arrowCanvas.show();
-    };
-
     var onRubberBandDrag = function (newSelectedRectT, newDraggedToTheRight) {
         if (selectedRectT === undefined ||
                 !newSelectedRectT.isEqualTo(selectedRectT) ||
@@ -58,7 +54,12 @@ define([
             draggedToTheRight = newDraggedToTheRight;
             needsToBeRendered = true;
             updateRotation();
-            arrowCanvas.rotation = rotation;
+            if (selectionCanBeRotated()) {
+                arrowCanvas.show();
+                arrowCanvas.rotation = rotation;
+            } else {
+                arrowCanvas.hide();
+            }
         }
     };
 
@@ -71,46 +72,28 @@ define([
         }
     };
 
-    var tileConnectsToBorder = function (xT, yT, color, direction) {
-        var tileIsOutside = yT >= tiles.heightT || yT < 0;
-
-        if (tileIsOutside) {
-            return true;
-        }
-
-        return (tiles[xT][yT].color === color) &&
-            tileConnectsToBorder(xT, yT + direction, color, direction);
-    };
-
-    var aTileConnectsToBorder = function (leftXT, rightXT, yT, color,
-                                          direction) {
+    var rowContainsFixedTile = function (leftXT, rightXT, yT) {
         if (leftXT > rightXT) {
             return false;
         }
 
-        return tileConnectsToBorder(leftXT, yT, color, direction) ||
-            aTileConnectsToBorder(leftXT + 1, rightXT, yT, color, direction);
+        return tileIsFixed([leftXT, yT]) ||
+            rowContainsFixedTile(leftXT + 1, rightXT, yT);
     };
 
-    var aTileConnectsToBottom = function (leftXT, rightXT, bottomYT) {
-        return aTileConnectsToBorder(leftXT, rightXT, bottomYT,
-                                     "rgb(255,0,255)", 1);
-    };
-
-    var aTileConnectsToTop = function (leftXT, rightXT, topYT) {
-        return aTileConnectsToBorder(leftXT, rightXT, topYT,
-                                     "rgb(0,255,0)", -1);
-    };
-
-    var onRubberBandDragEnd = function () {
+    var selectionCanBeRotated = function () {
         var leftXT = selectedRectT[0][0];
         var topYT = selectedRectT[0][1];
         var rightXT = selectedRectT[1][0];
         var bottomYT = selectedRectT[1][1];
 
+        return !rowContainsFixedTile(leftXT, rightXT, topYT) &&
+            !rowContainsFixedTile(leftXT, rightXT, bottomYT);
+    };
+
+    var onRubberBandDragEnd = function () {
         if (rotation !== undefined &&
-                !aTileConnectsToBottom(leftXT, rightXT, bottomYT) &&
-                !aTileConnectsToTop(leftXT, rightXT, topYT) &&
+                selectionCanBeRotated() &&
                 rotation.makesSense &&
                 !boards.selected.isFinished) {
             boards.selected.rotate(rotation);
@@ -135,31 +118,60 @@ define([
                 posT[1] <= selectedRectT[1][1]);
     };
 
-    var renderTile = function (ctx, posT) {
-        var pos = displayCSys.posFromPosT(posT);
-        var color = tiles[posT[0]][posT[1]].color;
-        var showSelection = rubberBandCanvas.isBeingDragged;
-        var tileSideLen = displayCSys.tileSideLen;
+    var tileSticksToBorder = function (xT, yT, color, direction) {
+        var tileIsOutsideBoard = yT >= tiles.heightT || yT < 0;
 
-        // to avoid ugly thin black lines when there is no spacing (rendering
-        // error with many browsers as of Sept. 2012)
-        var lenAdd = displayCSys.spacing === 0
-            ? 1
-            : 0;
+        if (tileIsOutsideBoard) {
+            return true;
+        }
+
+        return (tiles[xT][yT].color === color) &&
+            tileSticksToBorder(xT, yT + direction, color, direction);
+    };
+
+    var tileIsFixed = function (posT) {
+        var xT = posT[0];
+        var yT = posT[1];
+
+        if (yT < 2) {
+            return tileSticksToBorder(xT, yT, "rgb(0,255,0)", -1);
+        }
+
+        if (yT >= tiles.heightT - 2) {
+            return tileSticksToBorder(xT, yT, "rgb(255,0,255)", 1);
+        }
+
+        return false;
+    };
+
+    var renderTile = function (ctx, posT) {
+        var isFixed = tileIsFixed(posT);
+        var pos = displayCSys.posFromPosT(posT, isFixed);
+        var color = tiles[posT[0]][posT[1]].color;
+        var tileSideLen = isFixed
+                ? displayCSys.fixedTileSideLen
+                : displayCSys.tileSideLen;
+
+        // overlap to avoid ugly thin black lines when there is no spacing:
+/* TODO:          if (isFixed) {
+            pos[1] += posT[1] < 2 ? -1 : 0;
+            tileSideLen += 1;
+        }
+*/
 
         if (rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT)) {
             return; // don't show this tile, it's animated
         }
 
-        ctx.globalAlpha = (showSelection && tileIsSelected(posT))
+        ctx.globalAlpha = tileIsSelected(posT) && selectionCanBeRotated()
             ? 0.5
             : 1;
         ctx.fillStyle = color;
         ctx.fillRect(
             pos[0],
             pos[1],
-            tileSideLen + lenAdd,
-            tileSideLen + lenAdd
+            tileSideLen,
+            tileSideLen
         );
     };
 
@@ -225,7 +237,6 @@ define([
         rotAnimCanvas.startAnim(initRotation);
     };
 
-    rubberBandCanvas.onDragStart = onRubberBandDragStart;
     rubberBandCanvas.onDrag = onRubberBandDrag;
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 

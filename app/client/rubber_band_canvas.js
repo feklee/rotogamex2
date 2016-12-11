@@ -20,7 +20,6 @@ define([
     var isBeingDragged = false;
     var lineWidth = 1;
     var onDrag2; // configurable handler, called at the end of `onDrag`
-    var onDragStart2;
     var onDragEnd2;
 
     // may be negative
@@ -99,9 +98,6 @@ define([
         updateDraggedToTheRight();
         isBeingDragged = true;
         needsToBeRendered = true;
-        if (onDragStart2 !== undefined) {
-            onDragStart2();
-        }
     };
 
     var onDrag = function (pos) {
@@ -213,10 +209,6 @@ define([
                 sideLen = x;
                 needsToBeRendered = true;
             }
-        }},
-
-        onDragStart: {set: function (x) {
-            onDragStart2 = x;
         }},
 
         onDrag: {set: function (x) {
