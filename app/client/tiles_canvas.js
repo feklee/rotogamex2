@@ -144,6 +144,14 @@ define([
         return false;
     };
 
+    var leftT = function (posT) {
+        return [posT[0] - 1, posT[1]];
+    };
+
+    var aboveT = function (posT) {
+        return [posT[0], posT[1] - 1];
+    };
+
     var renderTile = function (ctx, posT) {
         var isFixed = tileIsFixed(posT);
         var pos = displayCSys.posFromPosT(posT, isFixed);
@@ -153,11 +161,12 @@ define([
                 : displayCSys.tileSideLen;
 
         // overlap to avoid ugly thin black lines when there is no spacing:
-/* TODO:          if (isFixed) {
-            pos[1] += posT[1] < 2 ? -1 : 0;
-            tileSideLen += 1;
-        }
-*/
+        var overlapX = isFixed && posT[0] > 0 && tileIsFixed(leftT(posT))
+                ? 1
+                : 0;
+        var overlapY = isFixed && posT[1] > 0 && tileIsFixed(aboveT(posT))
+                ? 1
+                : 0;
 
         if (rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT)) {
             return; // don't show this tile, it's animated
@@ -168,10 +177,10 @@ define([
             : 1;
         ctx.fillStyle = color;
         ctx.fillRect(
-            pos[0],
-            pos[1],
-            tileSideLen,
-            tileSideLen
+            pos[0] - overlapX,
+            pos[1] - overlapY,
+            tileSideLen + overlapX,
+            tileSideLen + overlapY
         );
     };
 
