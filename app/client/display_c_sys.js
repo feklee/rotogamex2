@@ -18,10 +18,33 @@ define(["boards"], function (boards) {
 
         if (board !== undefined) {
             sideLenT = board.sideLenT;
-            spacing = 0.05 * sideLen / sideLenT;
-            tileSideLen = (sideLen - spacing * (sideLenT + 1)) / sideLenT;
+            spacing = 0.1 * sideLen / sideLenT;
+            tileSideLen = (sideLen - spacing * sideLenT) / sideLenT;
             fixedTileSideLen = sideLen / sideLenT;
         }
+    };
+
+    var coordFromCoordT = function (coordT, tileIsFixed = false) {
+        var s = tileIsFixed ? 0 : spacing;
+        var l = tileIsFixed ? fixedTileSideLen : tileSideLen;
+        return coordT * (l + s) + s / 2;
+    };
+
+    // Converts tile position to screen position. Returns the upper left
+    // position of a tile in screen coordinates.
+    var posFromPosT = function (posT, tileIsFixed = false) {
+        return posT.map(function (coordT) {
+            return coordFromCoordT(coordT, tileIsFixed);
+        });
+    };
+
+    var coordTFromCoord = function (coord) {
+        return Math.floor((coord - spacing / 2) / (tileSideLen + spacing));
+    };
+
+    // inverse of `posFromPosT`, with `Math.floor` applied to each element
+    var posTFromPos = function (pos) {
+        return pos.map(coordTFromCoord);
     };
 
     return Object.create(null, {
@@ -39,42 +62,32 @@ define(["boards"], function (boards) {
             }
         }},
 
-        // Converts tile position to screen position.
-        posFromPosT: {value: function (posT, tileIsFixed = false) {
-            return posT.map(function (coordT) {
-                var s = tileIsFixed ? 0 : spacing;
-                var l = tileIsFixed ? fixedTileSideLen : tileSideLen;
-                return coordT * (l + s) + s;
-            });
-        }},
+        posFromPosT: {value: posFromPosT},
 
-        // inverse of `posFromPosT`, with `Math.floor` applied to each element
-        posTFromPos: {value: function (pos) {
-            return pos.map(function (coord) {
-                return (coord - spacing) / (tileSideLen + spacing);
-            });
-        }},
+        posTFromPos: {value: posTFromPos},
 
         // If the specified position is in spacing between tiles, then
-        // coordinates in question are shifted so that they are in the middle
-        // of the next tile to the upper and/or left.
+        // coordinates in question are shifted so that they are in the tile
+        // above and/or to the left.
         decIfInSpacing: {value: function (pos) {
-            return pos.map(function (coord) {
-                var modulo = coord % (tileSideLen + spacing);
-                return (coord > 0 && modulo < spacing)
-                    ? (coord - modulo - tileSideLen / 2)
-                    : coord;
+            return pos.map(function (coord, i) {
+                var coordT = coordTFromCoord(coord);
+                var coordIsInSpacing =
+                        coord > coordFromCoordT(coordT - 1) + tileSideLen &&
+                        coord < coordFromCoordT(coordT)
+                return coordIsInSpacing ? coord - tileSideLen / 2 : coord;
             });
         }},
 
-        // Like `decIfInSpacing` but shifts to the tile to the lower and/or
+        // Like `decIfInSpacing` but shifts to the tile below and/or to the
         // right.
         incIfInSpacing: {value: function (pos) {
-            return pos.map(function (coord) {
-                var modulo = coord % (tileSideLen + spacing);
-                return (coord > 0 && modulo < spacing)
-                    ? (coord - modulo + spacing + tileSideLen / 2)
-                    : coord;
+            return pos.map(function (coord, i) {
+                var coordT = coordTFromCoord(coord);
+                var coordIsInSpacing =
+                        coord > coordFromCoordT(coordT) + tileSideLen &&
+                        coord < coordFromCoordT(coordT + 1)
+                return coordIsInSpacing ? coord + tileSideLen / 2 : coord;
             });
         }},
 
