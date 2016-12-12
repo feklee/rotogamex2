@@ -103,6 +103,11 @@ button:disabled {
     position: absolute;
 }
 
+#display {
+    border-top: 10px solid rgb(0,255,0);
+    border-bottom: 10px solid rgb(255,0,255);
+}
+
 #loadScreen {
     background: black;
 }
@@ -147,14 +152,6 @@ button:disabled {
     -ms-animation-timing-function: linear;
     -o-animation-timing-function: linear;
     animation-timing-function: linear;
-}
-
-#title {
-    font-weight: bold;
-}
-
-#nRotations {
-    padding: 0 0.2em;
 }
 
 #rubberBandCanvas {
