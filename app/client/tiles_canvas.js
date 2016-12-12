@@ -133,15 +133,8 @@ define([
         var xT = posT[0];
         var yT = posT[1];
 
-        if (yT < 2) {
-            return tileSticksToBorder(xT, yT, "rgb(255,127,0)", -1);
-        }
-
-        if (yT >= tiles.heightT - 2) {
-            return tileSticksToBorder(xT, yT, "rgb(0,127,255)", 1);
-        }
-
-        return false;
+        return tileSticksToBorder(xT, yT, "rgb(255,127,0)", -1) ||
+            tileSticksToBorder(xT, yT, "rgb(0,127,255)", 1);
     };
 
     var leftT = function (posT) {
