@@ -12,7 +12,6 @@ module.exports = function (env) {
         packageJson = require('../package.json'),
         openWebAppManifestJson =
             require('../views/open-web-app-manifest.json'),
-        amazonWebAppManifestJson,
         manifestAppcacheInc = readFileSync('views/' + env + '.appcache.inc',
                                            'utf8'),
         manifestAppcacheContent;
@@ -29,13 +28,6 @@ module.exports = function (env) {
                  manifestAppcacheInc);
 
         openWebAppManifestJson.version = packageJson.version;
-
-        amazonWebAppManifestJson = {
-            verification_key: process.env.AMAZON_VERIFICATION_KEY || '',
-            type: openWebAppManifestJson.type,
-            version: openWebAppManifestJson.version,
-            created_by: openWebAppManifestJson.developer.name
-        };
     }());
 
     return Object.create(null, {
@@ -57,10 +49,6 @@ module.exports = function (env) {
         manifestWebapp: {value: function (req, res) {
             res.set('Content-Type', 'application/x-web-app-manifest+json');
             res.send(JSON.stringify(openWebAppManifestJson));
-        }},
-        webAppManifestJson: {value: function (req, res) { // for Amazon
-            res.set('Content-Type', 'application/json; charset=utf-8');
-            res.send(JSON.stringify(amazonWebAppManifestJson));
         }}
     });
 };
