@@ -1,5 +1,3 @@
-// Common configuration, for client and server.
-
 /*jslint browser: true, maxlen: 80 */
 
 /*global define, require, module */

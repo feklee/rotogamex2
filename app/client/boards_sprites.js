@@ -5,7 +5,7 @@
 
 /*global define */
 
-define(["../common/tiles_factory"], function (tilesFactory) {
+define(["tiles_factory"], function (tilesFactory) {
     "use strict";
 
     var img = new Image();

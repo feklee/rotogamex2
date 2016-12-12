@@ -5,7 +5,7 @@
 /*global define */
 
 define([
-    "boards_sprites", "board_factory", "../common/config"
+    "boards_sprites", "board_factory", "config"
 ], function (
     boardsSprites,
     boardFactory,

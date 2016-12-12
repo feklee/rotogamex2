@@ -5,8 +5,7 @@
 /*global define, window */
 
 define([
-    "util", "../common/rect_t_factory", "display_c_sys",
-    "display_canvas_factory"
+    "util", "rect_t_factory", "display_c_sys", "display_canvas_factory"
 ], function (util, rectTFactory, displayCSys, displayCanvasFactory) {
     "use strict";
 
