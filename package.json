@@ -1,13 +1,13 @@
 {
   "name": "rotogamesq",
-  "version": "1.46.0",
+  "version": "1.0.0",
   "author": "Felix E. Klee <felix.klee@inka.de>",
-  "subdomain": "rotogamesq",
+  "subdomain": "rotogamex2",
   "domains": [
-    "sq.rotogame.com"
+    "x2.rotogame.com"
   ],
   "description":
-    "ROTOGAMEsq is a puzzle game inspired by squared bathroom tiles.",
+    "ROTOGAMEx2 is a two player game inspired by squared bathroom tiles.",
   "scripts": {
     "start": "node app.js"
   },
@@ -15,17 +15,14 @@
     "amdefine": ">=0.0.2",
     "express": "3.0.x",
     "jade": "0.27.x",
-    "png-js": "0.1.x",
-    "redis": "0.8.x",
-    "requirejs": "2.1.x",
-    "websocket": "^1.0.23"
+    "requirejs": "2.1.x"
   },
   "engines": {
     "node": "0.8.x"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/feklee/rotogamesq.git"
+    "url": "https://github.com/feklee/rotogamex2.git"
   },
   "license": "WTFPL"
 }
