@@ -98,8 +98,7 @@ button:disabled {
     color: #777;
 }
 
-#title, #display, #boardsNavigator, #rotationsNavigator,
-#hiscoresTableGroup, #hiscoresTableGroup>table,
+#title, #display,
 #loadScreen, #tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
     position: absolute;
 }
@@ -154,92 +153,8 @@ button:disabled {
     font-weight: bold;
 }
 
-#rotationsNavigator {
-    font-weight: bold;
-}
-
-#rotationsNavigator>button, #hiscoresTableGroup .submit.button {
-    font-family: 'fontello';
-    font-weight: normal;
-    font-size: 0.7em;
-}
-
-#rotationsNavigator>button {
-    display: inline;
-}
-
 #nRotations {
     padding: 0 0.2em;
-}
-
-#rotationsNavigator>button.reset {
-    display: none;
-}
-
-#hiscoresTableGroup {
-    overflow: hidden;
-}
-
-#hiscoresTableGroup>table td {
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-#hiscoresTableGroup>table td:first-child {
-    text-align: left;
-    width: 85%;
-    text-overflow: ellipsis;
-}
-
-#hiscoresTableGroup>table td:last-child {
-    text-align: right;
-    width: 15%;
-}
-
-#hiscoresTableGroup>table tr.input {
-    border-bottom: 0.2ex solid white;
-}
-
-#hiscoresTableGroup>table td input {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    color: white;
-    cursor: text;
-    font-family: inherit;
-    font-size: inherit;
-    width: 100%;
-
-    -webkit-touch-callout: default;
-    -webkit-user-select: text;
-    -khtml-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
-}
-
-#hiscoresTableGroup>table td input:focus {
-    outline-width: 0;
-}
-
-#hiscoresTableGroup>table td span {
-    font-weight: bold;
-}
-
-#hiscoresTableGroup>table tr.unsaved td:last-child>span {
-    display: inline-block;
-    background: white;
-    vertical-align: middle;
-}
-
-#boardsNavigator {
-    position: absolute;
-    overflow: hidden;
-}
-
-#boardsNavigator>* {
-    cursor: pointer;
-    position: absolute;
 }
 
 #rubberBandCanvas {
