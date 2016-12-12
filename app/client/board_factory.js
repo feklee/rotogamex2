@@ -4,7 +4,7 @@
 
 /*global define */
 
-define(["hiscores_factory"], function (hiscoresFactory) {
+define(function () {
     "use strict";
 
     // Updates `internal.isFinished`.
@@ -12,11 +12,9 @@ define(["hiscores_factory"], function (hiscoresFactory) {
         if (board.tiles.colorsAreEqualTo(board.endTiles)) {
             if (!internal.isFinished) {
                 internal.isFinished = true;
-                board.hiscores.propose(internal.rotations);
             }
         } else {
             internal.isFinished = false;
-            board.hiscores.rmProposal(); // or else it would still appear
         }
     };
 
@@ -64,7 +62,6 @@ define(["hiscores_factory"], function (hiscoresFactory) {
 
     var create = function (name, startTiles, endTiles) {
         var internal = {};
-        var hiscores = hiscoresFactory.create(name);
 
         initInternal(internal, startTiles);
 
@@ -95,17 +92,8 @@ define(["hiscores_factory"], function (hiscoresFactory) {
                 return internal.rotations.length < 99;
             }},
 
-            // True, if user can rotate e.g. by selection or by doing undo /
-            // redo. Once the board is finished, and the hiscore has been
-            // saved, the board is not interactive anymore. Otherwise the user
-            // could undo, redo, and then enter hiscore again.
-            isInteractive: {get: function () {
-                return !hiscores.proposalWasSaved;
-            }},
-
             undoIsPossible: {get: function () {
-                return (board.isInteractive &&
-                        internal.rotations.length > 0);
+                return internal.rotations.length > 0;
             }},
 
             undo: {value: function () {
@@ -115,8 +103,7 @@ define(["hiscores_factory"], function (hiscoresFactory) {
             }},
 
             redoIsPossible: {get: function () {
-                return (board.isInteractive &&
-                        internal.futureRotations.length > 0);
+                return internal.futureRotations.length > 0;
             }},
 
             redo: {value: function () {
@@ -127,7 +114,6 @@ define(["hiscores_factory"], function (hiscoresFactory) {
 
             reset: {value: function () {
                 initInternal(internal);
-                hiscores.resetProposal();
             }},
 
             isFinished: {get: function () {
@@ -141,10 +127,6 @@ define(["hiscores_factory"], function (hiscoresFactory) {
             name: {get: function () {
                 return name;
             }},
-
-            hiscores: {get: function () {
-                return hiscores;
-            }}
         });
     };
 

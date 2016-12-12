@@ -5,16 +5,8 @@
 /*global define, window */
 
 define([
-    "display", "boards", "rotations_navigator", "hiscores_table",
-    "boards_navigator", "util", "vendor/rAF"
-], function (
-    display,
-    boards,
-    rotationsNavigator,
-    hiscoresTable,
-    boardsNavigator,
-    util
-) {
+    "display", "boards", "util", "vendor/rAF"
+], function (display, boards, util) {
     "use strict";
 
     var loaded = false;
@@ -34,27 +26,6 @@ define([
         display.layout = {
             sideLen: height,
             top: 0
-        };
-        boardsNavigator.layout = {
-            portrait: false,
-            width: panelInsideWidth,
-            height: Math.round((width - height) / 4),
-            left: panelInsideLeft,
-            top: Math.round(0.99 * height - (width - height) / 4)
-        };
-        rotationsNavigator.layout = {
-            portrait: false,
-            width: panelInsideWidth,
-            height: Math.round(0.1 * height),
-            left: panelInsideLeft,
-            top: Math.round(0.135 * height)
-        };
-        hiscoresTable.layout = {
-            portrait: false,
-            width: panelInsideWidth,
-            height: Math.round(0.5 * height),
-            left: panelInsideLeft,
-            top: Math.round(0.28 * height)
         };
     };
 
@@ -91,12 +62,6 @@ define([
 
         componentTop = 0;
         componentHeight = Math.round(remainingHeight * 0.2);
-        rotationsNavigator.layout = {
-            portrait: true,
-            height: componentHeight,
-            top: componentTop,
-            rightMargin: horizontalMargin
-        };
         componentTop += componentHeight;
         componentHeight = width;
         display.layout = {
@@ -105,22 +70,8 @@ define([
         };
         componentTop += componentHeight + remainingHeight * 0.03;
         componentHeight = Math.round(remainingHeight * 0.33);
-        boardsNavigator.layout = {
-            portrait: true,
-            width: width - 2 * horizontalMargin,
-            height: componentHeight,
-            top: componentTop,
-            horizontalMargin: horizontalMargin
-        };
         componentTop += componentHeight + remainingHeight * 0.05;
         componentHeight = Math.round(remainingHeight * 0.39);
-        hiscoresTable.layout = {
-            portrait: true,
-            width: width - 2 * horizontalMargin,
-            height: componentHeight,
-            top: componentTop,
-            horizontalMargin: horizontalMargin
-        };
     };
 
     // Gives the game portrait layout. The game is sized so that it takes up
@@ -165,32 +116,12 @@ define([
     var animStep;
     animStep = function () {
         display.animStep();
-        boardsNavigator.animStep();
-        rotationsNavigator.animStep();
-        hiscoresTable.animStep();
 
         window.requestAnimationFrame(animStep);
     };
 
-    var doNotUpdateLayout = function () {
-        // At least on iOS 6.0 devices, updating layout causes loss of keyboard
-        // focus, since focus cannot be reassigned after redrawing. See also:
-        //
-        // <url:http://stackoverflow.com/questions/15797991/
-        // check-if-keyboard-focus-can-be-set-by-javascript>
-        //
-        // As of October 2013, the issue has also been detected on Firefox OS
-        // 1.3 nightly running on a Geeksphone Keon.
-        //
-        // => It's better not to update layout when the hiscores table has
-        // (keyboard) focus.
-        return hiscoresTable.hasFocus;
-    };
-
     var onResize = function () {
-        if (!doNotUpdateLayout()) {
-            updateLayout();
-        }
+        updateLayout();
     };
 
     var hideLoadScreen = function () {
@@ -219,7 +150,6 @@ define([
         window.addEventListener("resize", onResize);
 
         display.isVisible = true;
-        boardsNavigator.activate();
         updateLayout();
 
         animStep(); // Refreshes display right away (to avoid flicker), then
