@@ -104,8 +104,8 @@ button:disabled {
 }
 
 #display {
-    border-top: 10px solid rgb(0,255,0);
-    border-bottom: 10px solid rgb(255,0,255);
+    border-top: 2vh solid rgb(0,255,0);
+    border-bottom: 2vh solid rgb(255,0,255);
 }
 
 #loadScreen {
@@ -156,4 +156,13 @@ button:disabled {
 
 #rubberBandCanvas {
     cursor: crosshair;
+}
+
+button.reset {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-family: 'fontello';
+    font-weight: normal;
+    font-size: 5vh;
 }

@@ -92,8 +92,19 @@ define([
         // <http://stackoverflow.com/a/13720649>
     };
 
+    var onResetClick = function () {
+        boards.selected.reset();
+    };
+
+    var setUpResetButton = function () {
+        var el = document.querySelector("button.reset");
+        el.addEventListener("click", onResetClick);
+    };
+
     var onDocumentComplete = function () {
         loaded = true;
+
+        setUpResetButton();
 
         hideLoadScreen();
 
