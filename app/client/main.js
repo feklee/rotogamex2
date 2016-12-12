@@ -14,47 +14,8 @@ define([
     var width; // px
     var height; // px
 
-    // Updates GUI components for landscape layout.
-    var updateComponentsLandscapeLayout = function (width, height) {
-        // panel = panel with all the elements on the right of the board
-        var panelWidth = width - height;
-        var panelLeft = height;
-        var panelInsideMargin = Math.round(0.05 * panelWidth);
-        var panelInsideWidth = panelWidth - 2 * panelInsideMargin;
-        var panelInsideLeft = panelLeft + panelInsideMargin;
-
-        display.layout = {
-            sideLen: height,
-            top: 0
-        };
-    };
-
-    // Gives the game lanscape layout. The game is sized so that it takes up
-    // the space of a golden ratio rectangle that takes up maximum space in the
-    // browser window.
-    var updateLandscapeLayout = function (viewportWidth, viewportHeight) {
-        var viewportRatio = viewportWidth / viewportHeight;
-        var s = document.body.style;
-
-        if (viewportRatio < goldenRatio) {
-            width = viewportWidth;
-            height = Math.round(width / goldenRatio);
-        } else {
-            height = viewportHeight;
-            width = Math.round(height * goldenRatio);
-        }
-
-        s.width = width + "px";
-        s.height = height + "px";
-        s.margin = 0;
-
-        if (loaded) {
-            updateComponentsLandscapeLayout(width, height);
-        }
-    };
-
-    // Updates components for portrait layout.
-    var updateComponentsPortraitLayout = function (width, height) {
+    // Updates components for layout.
+    var updateComponentsLayout = function (width, height) {
         var remainingHeight = height - width; // height without board display
         var componentHeight;
         var componentTop;
@@ -74,10 +35,12 @@ define([
         componentHeight = Math.round(remainingHeight * 0.39);
     };
 
-    // Gives the game portrait layout. The game is sized so that it takes up
-    // maximum space in the browser window. It's aspect ratio is set in limits:
-    // between 3:4 and reciprocal golden ratio.
-    var updatePortraitLayout = function (viewportWidth, viewportHeight) {
+    // Gives the game layout. The game is sized so that it takes up maximum
+    // space in the browser window. It's aspect ratio is set in limits: between
+    // 3:4 and reciprocal golden ratio.
+    var updateLayout = function () {
+        var viewportWidth = window.innerWidth;
+        var viewportHeight = window.innerHeight;
         var viewportRatio = viewportWidth / viewportHeight;
         var s = document.body.style;
 
@@ -98,18 +61,7 @@ define([
         s.margin = "0 auto"; // centers horizontally
 
         if (loaded) {
-            updateComponentsPortraitLayout(width, height);
-        }
-    };
-
-    var updateLayout = function () {
-        var viewportWidth = window.innerWidth;
-        var viewportHeight = window.innerHeight;
-
-        if (viewportWidth > viewportHeight) {
-            updateLandscapeLayout(viewportWidth, viewportHeight);
-        } else {
-            updatePortraitLayout(viewportWidth, viewportHeight);
+            updateComponentsLayout(width, height);
         }
     };
 
