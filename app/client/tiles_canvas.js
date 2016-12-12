@@ -134,11 +134,11 @@ define([
         var yT = posT[1];
 
         if (yT < 2) {
-            return tileSticksToBorder(xT, yT, "rgb(0,255,0)", -1);
+            return tileSticksToBorder(xT, yT, "rgb(255,127,0)", -1);
         }
 
         if (yT >= tiles.heightT - 2) {
-            return tileSticksToBorder(xT, yT, "rgb(255,0,255)", 1);
+            return tileSticksToBorder(xT, yT, "rgb(0,127,255)", 1);
         }
 
         return false;

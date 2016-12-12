@@ -104,8 +104,8 @@ button:disabled {
 }
 
 #display {
-    border-top: 2vh solid rgb(0,255,0);
-    border-bottom: 2vh solid rgb(255,0,255);
+    border-top: 2vh solid rgb(255,127,0);
+    border-bottom: 2vh solid rgb(0,127,255);
 }
 
 #loadScreen {
