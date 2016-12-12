@@ -5,12 +5,11 @@
 /*global define, window */
 
 define([
-    "display", "boards", "title", "rotations_navigator", "hiscores_table",
+    "display", "boards", "rotations_navigator", "hiscores_table",
     "boards_navigator", "util", "vendor/rAF"
 ], function (
     display,
     boards,
-    title,
     rotationsNavigator,
     hiscoresTable,
     boardsNavigator,
@@ -35,12 +34,6 @@ define([
         display.layout = {
             sideLen: height,
             top: 0
-        };
-        title.layout = {
-            portrait: false,
-            width: panelWidth,
-            left: panelLeft,
-            height: Math.round(0.1 * height)
         };
         boardsNavigator.layout = {
             portrait: false,
@@ -98,11 +91,6 @@ define([
 
         componentTop = 0;
         componentHeight = Math.round(remainingHeight * 0.2);
-        title.layout = {
-            portrait: true,
-            height: componentHeight,
-            leftMargin: horizontalMargin
-        };
         rotationsNavigator.layout = {
             portrait: true,
             height: componentHeight,
@@ -177,7 +165,6 @@ define([
     var animStep;
     animStep = function () {
         display.animStep();
-        title.animStep();
         boardsNavigator.animStep();
         rotationsNavigator.animStep();
         hiscoresTable.animStep();
