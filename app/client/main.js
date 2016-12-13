@@ -14,38 +14,11 @@ define([
     var width; // px
     var height; // px
 
-    // Gives the game layout. The game is sized so that it takes up maximum
-    // space in the browser window. It's aspect ratio is limited to not be below
-    // 3:4.
-    var updateLayout = function () {
-        var viewportWidth = window.innerWidth;
-        var viewportHeight = window.innerHeight;
-        var viewportRatio = viewportWidth / viewportHeight;
-        var s = document.body.style;
-
-        width = viewportWidth;
-        height = viewportHeight;
-
-        // restricts aspect ratio:
-        if (viewportRatio > 3 / 4) {
-            // wider than 3:4 => restrict width
-            width = Math.round(height * 3 / 4);
-        }
-
-        s.width = width + "px";
-        s.height = height + "px";
-        s.margin = "0 auto"; // centers horizontally
-    };
-
     var animStep;
     animStep = function () {
         display.animStep();
 
         window.requestAnimationFrame(animStep);
-    };
-
-    var onResize = function () {
-        updateLayout();
     };
 
     var hideLoadScreen = function () {
@@ -80,12 +53,7 @@ define([
 
         hideLoadScreen();
 
-        // Resize not before now, to avoid jumpy load screen animation.
-        onResize(); // captures initial size
-        window.addEventListener("resize", onResize);
-
         display.isVisible = true;
-        updateLayout();
 
         animStep(); // Refreshes display right away (to avoid flicker), then
                     // continues with animation
