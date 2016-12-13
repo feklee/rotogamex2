@@ -36,8 +36,8 @@ define([
     };
 
     // Gives the game layout. The game is sized so that it takes up maximum
-    // space in the browser window. It's aspect ratio is set in limits: between
-    // 3:4 and reciprocal golden ratio.
+    // space in the browser window. It's aspect ratio is limited to not be below
+    // 3:4.
     var updateLayout = function () {
         var viewportWidth = window.innerWidth;
         var viewportHeight = window.innerHeight;
@@ -48,10 +48,7 @@ define([
         height = viewportHeight;
 
         // restricts aspect ratio:
-        if (viewportRatio < 1 / goldenRatio) {
-            // thinner than reciprocal golden ratio => restrict height
-            height = Math.round(width * goldenRatio);
-        } else if (viewportRatio > 3 / 4) {
+        if (viewportRatio > 3 / 4) {
             // wider than 3:4 => restrict width
             width = Math.round(height * 3 / 4);
         }
@@ -108,7 +105,7 @@ define([
 
         hideLoadScreen();
 
-        // Resize not beforen now, to avoid jumpy load screen animation.
+        // Resize not before now, to avoid jumpy load screen animation.
         onResize(); // captures initial size
         window.addEventListener("resize", onResize);
 
