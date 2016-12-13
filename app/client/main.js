@@ -14,27 +14,6 @@ define([
     var width; // px
     var height; // px
 
-    // Updates components for layout.
-    var updateComponentsLayout = function (width, height) {
-        var remainingHeight = height - width; // height without board display
-        var componentHeight;
-        var componentTop;
-        var horizontalMargin = 0.01 * width;
-
-        componentTop = 0;
-        componentHeight = Math.round(remainingHeight * 0.2);
-        componentTop += componentHeight;
-        componentHeight = width;
-        display.layout = {
-            sideLen: componentHeight,
-            top: componentTop
-        };
-        componentTop += componentHeight + remainingHeight * 0.03;
-        componentHeight = Math.round(remainingHeight * 0.33);
-        componentTop += componentHeight + remainingHeight * 0.05;
-        componentHeight = Math.round(remainingHeight * 0.39);
-    };
-
     // Gives the game layout. The game is sized so that it takes up maximum
     // space in the browser window. It's aspect ratio is limited to not be below
     // 3:4.
@@ -56,10 +35,6 @@ define([
         s.width = width + "px";
         s.height = height + "px";
         s.margin = "0 auto"; // centers horizontally
-
-        if (loaded) {
-            updateComponentsLayout(width, height);
-        }
     };
 
     var animStep;

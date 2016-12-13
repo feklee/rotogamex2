@@ -13,6 +13,7 @@ define([
     var sideLen;
     var rotation;
     var object;
+    var el = document.querySelector("canvas.arrow");
 
     var renderArc = function (ctx, x, y, u, angleDeg) {
         var startAngle = 0;
@@ -81,9 +82,20 @@ define([
 
     var displayCanvas = displayCanvasFactory.create();
 
+    var obtainSideLen = function () {
+        sideLen = el.clientWidth;
+        if (displayCanvas.isVisible) {
+            needsToBeRendered = true;
+        }
+    };
+
+    window.addEventListener("resize", obtainSideLen);
+
     object = Object.create(displayCanvas, {
         animStep: {value: function () {
-            var el = document.getElementById("arrowCanvas");
+            if (sideLen === undefined) {
+                obtainSideLen();
+            }
 
             if (displayCanvas.visibilityNeedsToBeUpdated) {
                 displayCanvas.updateVisibility(el);
@@ -101,15 +113,6 @@ define([
         rotation: {set: function (x) {
             if (rotation === undefined || !rotation.isEqualTo(x)) {
                 rotation = x;
-                if (displayCanvas.isVisible) {
-                    needsToBeRendered = true;
-                }
-            }
-        }},
-
-        sideLen: {set: function (x) {
-            if (x !== sideLen) {
-                sideLen = x;
                 if (displayCanvas.isVisible) {
                     needsToBeRendered = true;
                 }

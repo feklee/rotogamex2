@@ -98,9 +98,16 @@ button:disabled {
     color: #777;
 }
 
-#title, #display,
-#loadScreen, #tilesCanvas, #arrowCanvas, #rotAnimCanvas, #rubberBandCanvas {
+#display {
+    position: relative;
+    width: 100vw;
+    height: 100vw;
+}
+
+#loadScreen, canvas.tiles, canvas.arrow, canvas.rot-anim, canvas.rubber-band {
     position: absolute;
+    width: 100vw;
+    height: 100vw;
 }
 
 #display {
@@ -154,7 +161,7 @@ button:disabled {
     animation-timing-function: linear;
 }
 
-#rubberBandCanvas {
+canvas.rubber-band {
     cursor: crosshair;
 }
 

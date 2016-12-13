@@ -47,15 +47,18 @@ define(["boards"], function (boards) {
         return pos.map(coordTFromCoord);
     };
 
-    return Object.create(null, {
-        sideLen: {set: function (x) {
-            if (x !== sideLen) {
-                sideLen = x;
-                updateDimensions();
-            }
-        }},
+    var obtainSideLen = function () {
+        sideLen = document.getElementById("display").clientWidth;
+        updateDimensions();
+    };
 
+    window.addEventListener("resize", obtainSideLen);
+
+    return Object.create(null, {
         animStep: {value: function () {
+            if (sideLen === undefined) {
+                obtainSideLen();
+            }
             if (boards.selected !== board) {
                 board = boards.selected;
                 updateDimensions();

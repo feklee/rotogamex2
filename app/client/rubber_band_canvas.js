@@ -20,6 +20,7 @@ define([
     var lineWidth = 1;
     var onDrag2; // configurable handler, called at the end of `onDrag`
     var onDragEnd2;
+    var el = document.querySelector("canvas.rubber-band");
 
     // may be negative
     var width = function () {
@@ -83,9 +84,7 @@ define([
 
     // Needed for calculating position when dragging.
     var updateCanvasPagePos = function () {
-        canvasPagePos = util.viewportPos(
-            document.getElementById("rubberBandCanvas")
-        );
+        canvasPagePos = util.viewportPos(el);
     };
 
     // assumes that canvas is at position 0, 0 in the document
@@ -166,8 +165,6 @@ define([
     };
 
     util.onceDocumentIsInteractive(function () {
-        var el = document.getElementById("rubberBandCanvas");
-
         el.addEventListener("mousedown", onMouseDown);
         el.addEventListener("touchstart", onTouchStart);
 
@@ -182,9 +179,20 @@ define([
 
     var rubberBandCanvas = Object.create(displayCanvasFactory.create());
 
+    var obtainSideLen = function () {
+        sideLen = el.clientWidth;
+        if (rubberBandCanvas.isVisible) {
+            needsToBeRendered = true;
+        }
+    };
+
+    window.addEventListener("resize", obtainSideLen);
+
     return Object.defineProperties(rubberBandCanvas, {
         animStep: {value: function () {
-            var el = document.getElementById("rubberBandCanvas");
+            if (sideLen === undefined) {
+                obtainSideLen();
+            }
 
             if (rubberBandCanvas.visibilityNeedsToBeUpdated) {
                 rubberBandCanvas.updateVisibility(el);
@@ -201,13 +209,6 @@ define([
 
         isBeingDragged: {get: function () {
             return isBeingDragged;
-        }},
-
-        sideLen: {set: function (x) {
-            if (x !== sideLen) {
-                sideLen = x;
-                needsToBeRendered = true;
-            }
         }},
 
         onDrag: {set: function (x) {

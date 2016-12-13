@@ -21,6 +21,7 @@ define([
     var animIsRunning;
     var rotation;
     var initRotAnimHasToBeTriggered = true;
+    var el = document.querySelector("canvas.tiles");
 
     var updateRotation = function () {
         if (selectedRectT === undefined) {
@@ -200,7 +201,6 @@ define([
 
     var render = function () {
         var sideLenT = board.sideLenT;
-        var el = document.getElementById("tilesCanvas");
         var ctx = el.getContext("2d");
         var renderAsFinished = board.isFinished &&
                 !rotAnimCanvas.animIsRunning;
@@ -252,12 +252,27 @@ define([
         rotAnimCanvas.startAnim(initRotation);
     };
 
+    var tilesCanvas = displayCanvasFactory.create();
+
+    var obtainSideLen = function () {
+        sideLen = el.clientWidth;
+        if (tilesCanvas.isVisible) {
+            needsToBeRendered = true;
+        }
+    };
+
+    window.addEventListener("resize", obtainSideLen);
+
     rubberBandCanvas.onDrag = onRubberBandDrag;
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 
-    return Object.create(displayCanvasFactory.create(), {
+    return Object.create(tilesCanvas, {
         animStep: {value: function () {
             var boardHasChanged;
+
+            if (sideLen === undefined) {
+                obtainSideLen();
+            }
 
             if (boardNeedsUpdate()) {
                 needsToBeRendered = true;
@@ -285,13 +300,6 @@ define([
             if (needsToBeRendered) {
                 render();
                 needsToBeRendered = false;
-            }
-        }},
-
-        sideLen: {set: function (x) {
-            if (x !== sideLen) {
-                sideLen = x;
-                needsToBeRendered = true;
             }
         }}
     });

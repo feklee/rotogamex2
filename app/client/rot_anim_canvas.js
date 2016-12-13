@@ -18,6 +18,7 @@ define([
     var angle; // current angle, in rad
     var direction; // rotation direction (-1, or +1)
     var board;
+    var el = document.querySelector("canvas.rot-anim");
 
     var renderTile = function (ctx, posT, rotCenter) {
         var pos = displayCSys.posFromPosT(posT);
@@ -93,9 +94,17 @@ define([
 
     var rotAnimCanvas = Object.create(displayCanvasFactory.create());
 
+    var obtainSideLen = function () {
+        sideLen = el.clientWidth;
+    };
+
+    window.addEventListener("resize", obtainSideLen);
+
     return Object.defineProperties(rotAnimCanvas, {
         animStep: {value: function () {
-            var el = document.getElementById("rotAnimCanvas");
+            if (sideLen === undefined) {
+                obtainSideLen();
+            }
 
             if (rotAnimCanvas.visibilityNeedsToBeUpdated) {
                 rotAnimCanvas.updateVisibility(el);
@@ -110,10 +119,6 @@ define([
                     rotAnimCanvas.hide();
                 }
             }
-        }},
-
-        sideLen: {set: function (x) {
-            sideLen = x;
         }},
 
         animIsRunning: {get: function () {
