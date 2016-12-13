@@ -107,12 +107,23 @@ button:disabled {
 }
 
 .player {
-    flex: auto
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.toolbar {
+    height: 0;
+    padding-bottom: 20%;
 }
 
 .player.one {
     background: rgb(255,127,0);
-    transform: rotate(180deg);
+}
+
+.player.one .toolbar {
+    background: gray;
+/*    transform: rotate(180deg);*/
 }
 
 .player.two {
@@ -190,5 +201,5 @@ canvas.rubber-band {
 button.reset {
     font-family: 'fontello';
     font-weight: normal;
-    font-size: 5vh;
+    font-size: 100%;
 }
