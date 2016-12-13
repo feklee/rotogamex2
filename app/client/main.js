@@ -22,7 +22,7 @@ define([
     };
 
     var hideLoadScreen = function () {
-        document.getElementById("loadScreen").style.display = "none";
+        document.getElementById("load-screen").style.display = "none";
     };
 
     // Needed e.g. on iOS 6 to prevent default dragging of page.
