@@ -98,13 +98,9 @@ define([
         sideLen = el.clientWidth;
     };
 
-    window.addEventListener("resize", obtainSideLen);
-
     return Object.defineProperties(rotAnimCanvas, {
         animStep: {value: function () {
-            if (sideLen === undefined) {
-                obtainSideLen();
-            }
+            obtainSideLen();
 
             if (rotAnimCanvas.visibilityNeedsToBeUpdated) {
                 rotAnimCanvas.updateVisibility(el);

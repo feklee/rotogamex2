@@ -180,19 +180,15 @@ define([
     var rubberBandCanvas = Object.create(displayCanvasFactory.create());
 
     var obtainSideLen = function () {
-        sideLen = el.clientWidth;
-        if (rubberBandCanvas.isVisible) {
+        if (sideLen !== el.clientWidth && rubberBandCanvas.isVisible) {
             needsToBeRendered = true;
         }
+        sideLen = el.clientWidth;
     };
-
-    window.addEventListener("resize", obtainSideLen);
 
     return Object.defineProperties(rubberBandCanvas, {
         animStep: {value: function () {
-            if (sideLen === undefined) {
-                obtainSideLen();
-            }
+            obtainSideLen();
 
             if (rubberBandCanvas.visibilityNeedsToBeUpdated) {
                 rubberBandCanvas.updateVisibility(el);

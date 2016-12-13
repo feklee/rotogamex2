@@ -255,13 +255,11 @@ define([
     var tilesCanvas = displayCanvasFactory.create();
 
     var obtainSideLen = function () {
-        sideLen = el.clientWidth;
-        if (tilesCanvas.isVisible) {
+        if (sideLen !== el.clientWidth && tilesCanvas.isVisible) {
             needsToBeRendered = true;
         }
+        sideLen = el.clientWidth;
     };
-
-    window.addEventListener("resize", obtainSideLen);
 
     rubberBandCanvas.onDrag = onRubberBandDrag;
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
@@ -270,9 +268,7 @@ define([
         animStep: {value: function () {
             var boardHasChanged;
 
-            if (sideLen === undefined) {
-                obtainSideLen();
-            }
+            obtainSideLen();
 
             if (boardNeedsUpdate()) {
                 needsToBeRendered = true;

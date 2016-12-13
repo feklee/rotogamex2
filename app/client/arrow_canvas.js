@@ -83,19 +83,15 @@ define([
     var displayCanvas = displayCanvasFactory.create();
 
     var obtainSideLen = function () {
-        sideLen = el.clientWidth;
-        if (displayCanvas.isVisible) {
+        if (sideLen !== el.clientWidth && displayCanvas.isVisible) {
             needsToBeRendered = true;
         }
+        sideLen = el.clientWidth;
     };
-
-    window.addEventListener("resize", obtainSideLen);
 
     object = Object.create(displayCanvas, {
         animStep: {value: function () {
-            if (sideLen === undefined) {
-                obtainSideLen();
-            }
+            obtainSideLen();
 
             if (displayCanvas.visibilityNeedsToBeUpdated) {
                 displayCanvas.updateVisibility(el);
