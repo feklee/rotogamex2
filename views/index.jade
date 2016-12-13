@@ -32,13 +32,17 @@ html(lang="en", manifest="manifest.appcache")
     include google_analytics.html
 
   body
+    .player.one
+      button.reset 
+
     #display
       canvas(class="tiles")
       canvas(class="arrow")
       canvas(class="rot-anim")
       canvas(class="rubber-band")
 
-    button.reset 
+    .player.two
+      button.reset 
 
     #loadScreen
       div
