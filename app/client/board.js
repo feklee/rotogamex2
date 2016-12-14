@@ -5,13 +5,54 @@
 /*global define */
 
 define([
-    "tiles_factory", "board_factory"
+    "tiles_factory"
 ], function (
-    tilesFactory,
-    boardFactory
+    tilesFactory
 ) {
     "use strict";
 
     var startTiles = tilesFactory.createFromCtx(null, null, 8);
-    return boardFactory.create("", startTiles);
+    var isFinished = false; // true when a game is finished
+    var tiles = startTiles.copy();
+    var lastRotation;
+
+    // Updates `isFinished`.
+    var updateIsFinished = function () {
+        isFinished = false;
+
+        // TODO: also consider draw when finishing
+    };
+
+    return Object.create(null, {
+        rotate: {value: function (rotation) {
+            tiles.rotate(rotation);
+            updateIsFinished();
+            lastRotation = rotation;
+        }},
+
+        tiles: {get: function () {
+            return tiles;
+        }},
+
+        sideLenT: {get: function () {
+            return tiles.length;
+        }},
+
+        reset: {value: function () {
+            tiles = startTiles.copy();
+            isFinished = false;
+        }},
+
+        isFinished: {get: function () {
+            return isFinished;
+        }},
+
+        lastRotation: {get: function () {
+            return lastRotation;
+        }},
+
+        name: {get: function () {
+            return name;
+        }},
+    });
 });
