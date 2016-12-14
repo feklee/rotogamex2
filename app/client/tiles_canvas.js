@@ -114,16 +114,16 @@ define([
     };
 
     var overlapForFixedTile = function (tile, xDir, yDir) {
-        var xT = tile.posT[0];
-        var yT = tile.posT[1];
+        var neighborXT = tile.posT[0] + xDir;
+        var neighborYT = tile.posT[1] + yDir;
 
-        if (xT > 0 && yT > 0) {
-            var neighboringTile = tiles[xT - xDir][yT - yDir];
+        if (board.isInside([neighborXT, neighborYT])) {
+            var neighborTile = tiles[neighborXT][neighborYT];
             var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
-            var displayNeighboringTileAsFixed = neighboringTile[key];
+            var displayNeighborTileAsFixed = neighborTile[key];
 
-            return (displayNeighboringTileAsFixed &&
-                    tile.color === neighboringTile.color)
+            return (displayNeighborTileAsFixed &&
+                    tile.color === neighborTile.color)
                     ? 1
                     : 0;
         } else {
@@ -132,8 +132,10 @@ define([
     };
 
     var overlapsForFixedTile = function (tile) {
-        return [overlapForFixedTile(tile, 1, 0),
-                overlapForFixedTile(tile, 0, 1)]
+        var overlaps = [overlapForFixedTile(tile, -1, 0),
+                        overlapForFixedTile(tile, 0, -1)]
+
+        return overlaps;
     };
 
     var renderTile = function (ctx, tile) {

@@ -10,6 +10,7 @@ define(["tiles"], function (tiles) {
     var isFinished = false; // true when a game is finished
     var lastRotation = null;
     var numberOfRotation = 0;
+    var sideLenT = tiles.length;
 
     // Updates `isFinished`.
     var updateIsFinished = function () {
@@ -35,7 +36,12 @@ define(["tiles"], function (tiles) {
         }},
 
         sideLenT: {get: function () {
-            return tiles.length;
+            return sideLenT;
+        }},
+
+        isInside: {value: function (posT) {
+            return posT[0] >= 0 && posT[0] < sideLenT &&
+                posT[1] >= 0 && posT[1] < sideLenT;
         }},
 
         reset: {value: function () {

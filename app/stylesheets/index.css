@@ -119,7 +119,7 @@ button:disabled {
 
 .player-1.toolbar {
     background: rgb(255,127,0);
-    transform: rotate(180deg);
+    transform: scale(-1, -1);
 }
 
 .player-2.toolbar {
