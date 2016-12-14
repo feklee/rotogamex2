@@ -5,11 +5,10 @@
 /*global define */
 
 define([
-    "tiles_factory", "board_factory", "config"
+    "tiles_factory", "board_factory"
 ], function (
     tilesFactory,
-    boardFactory,
-    config
+    boardFactory
 ) {
     "use strict";
 
@@ -17,19 +16,16 @@ define([
     var object;
 
     var createBoards = function () {
-        config.boards.forEach(function (boardConfig) {
-            var sideLenT = boardConfig.sideLenT;
-            var startTiles = tilesFactory.createFromCtx(
-                null,
-                boardConfig.startPosT,
-                sideLenT
-            );
+        var startTiles = tilesFactory.createFromCtx(
+            null,
+            null,
+            8
+        );
 
-            object.push(boardFactory.create(
-                boardConfig.name,
-                startTiles
-            ));
-        });
+        object.push(boardFactory.create(
+            "",
+            startTiles
+        ));
     };
 
     object = Object.create([], {
