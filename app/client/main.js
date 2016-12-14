@@ -5,14 +5,11 @@
 /*global define, window */
 
 define([
-    "display", "boards", "util", "vendor/rAF"
-], function (display, boards, util) {
+    "display", "boards", "util", "toolbar_constructor", "vendor/rAF"
+], function (display, boards, util, toolbarConstructor) {
     "use strict";
 
     var loaded = false;
-    var goldenRatio = 1.61803398875;
-    var width; // px
-    var height; // px
 
     var animStep;
     animStep = function () {
@@ -45,21 +42,13 @@ define([
         // <http://stackoverflow.com/a/13720649>
     };
 
-    var onResetClick = function () {
-        boards.selected.reset();
-    };
-
-    var setUpResetButton = function () {
-        var el = document.querySelector(".reset button");
-        el.addEventListener("click", onResetClick);
-    };
-
     var onDocumentComplete = function () {
         loaded = true;
 
-        adjustFontSize();
+        toolbarConstructor(1);
+        toolbarConstructor(2);
 
-        setUpResetButton();
+        adjustFontSize();
 
         hideLoadScreen();
 
