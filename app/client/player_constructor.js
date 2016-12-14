@@ -17,5 +17,8 @@ define(["boards"], function (boards) {
 
     return function (playerNumber) {
         setUpResetButton(playerNumber);
+
+        return Object.create(null, {
+        });
     };
 });
