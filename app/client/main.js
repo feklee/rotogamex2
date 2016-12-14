@@ -66,6 +66,7 @@ define([
 
     util.onceDocumentIsInteractive(function () {
         preventPageDrag();
-        boards.load(onBoardsLoaded);
+        boards.load();
+        onBoardsLoaded();
     });
 });

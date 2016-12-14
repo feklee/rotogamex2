@@ -207,12 +207,6 @@ define(function () {
     // This makes it possible to differentiate between tiles that have the same
     // color (when comparing them using e.g. `===`).
     var createFromCtx = function (ctx, posT, sideLenT) {
-        var imgData = ctx.getImageData(
-            posT[0],
-            posT[1],
-            sideLenT,
-            sideLenT
-        ).data;
         var rawData = [
                 [{"color":"rgb(0,127,255)"},
                  {"color":"rgb(0,0,0)"},

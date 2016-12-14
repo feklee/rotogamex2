@@ -5,9 +5,9 @@
 /*global define */
 
 define([
-    "boards_sprites", "board_factory", "config"
+    "tiles_factory", "board_factory", "config"
 ], function (
-    boardsSprites,
+    tilesFactory,
     boardFactory,
     config
 ) {
@@ -19,8 +19,11 @@ define([
     var createBoards = function () {
         config.boards.forEach(function (boardConfig) {
             var sideLenT = boardConfig.sideLenT;
-            var startTiles = boardsSprites.tiles(boardConfig.startPosT,
-                    sideLenT);
+            var startTiles = tilesFactory.createFromCtx(
+                null,
+                boardConfig.startPosT,
+                sideLenT
+            );
 
             object.push(boardFactory.create(
                 boardConfig.name,
@@ -31,10 +34,7 @@ define([
 
     object = Object.create([], {
         load: {value: function (onLoaded) {
-            boardsSprites.load(function () {
-                createBoards();
-                onLoaded();
-            });
+            createBoards();
         }},
 
         selected: {get: function () {
