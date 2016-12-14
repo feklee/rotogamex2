@@ -133,14 +133,14 @@ define(function () {
                 imgData[offs + 2] + ")");
     };
 
-    var createColumnFromCtx = function (xT, sideLenT, imgData) {
+    var createColumnFromCtx = function (xT, sideLenT, rawDataColumn) {
         var tilesColumn = [];
         var offs;
         var yT = 0;
         while (yT < sideLenT) {
             offs = 4 * (yT * sideLenT + xT);
             tilesColumn.push({
-                color: rgb(imgData, offs)
+                color: rawDataColumn[yT].color
             });
             yT += 1;
         }
@@ -213,10 +213,75 @@ define(function () {
             sideLenT,
             sideLenT
         ).data;
+        var rawData = [
+                [{"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"}],
+                [{"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"}],
+                [{"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"}],
+                [{"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"}],
+                [{"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"}],
+                [{"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"}],
+                [{"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"}],
+                [{"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(0,127,255)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"},
+                 {"color":"rgb(0,0,0)"},
+                 {"color":"rgb(255,127,0)"}]];
         var tiles = create();
         var xT = 0;
         while (xT < sideLenT) {
-            tiles.push(createColumnFromCtx(xT, sideLenT, imgData));
+            tiles.push(createColumnFromCtx(xT, sideLenT, rawData[xT]));
             xT += 1;
         }
 
