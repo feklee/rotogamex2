@@ -39,11 +39,6 @@ define(["tiles"], function (tiles) {
             return sideLenT;
         }},
 
-        isInside: {value: function (posT) {
-            return posT[0] >= 0 && posT[0] < sideLenT &&
-                posT[1] >= 0 && posT[1] < sideLenT;
-        }},
-
         reset: {value: function () {
             tiles.reset();
             lastRotation = null;

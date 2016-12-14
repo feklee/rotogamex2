@@ -113,29 +113,26 @@ define([
         return rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT);
     };
 
-    var overlapForFixedTile = function (tile, xDir, yDir) {
-        var neighborXT = tile.posT[0] + xDir;
-        var neighborYT = tile.posT[1] + yDir;
+    var roundBordersBetweenFixedTiles = function (tile, extents) {
+        var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
+        var xT = tile.posT[0];
+        var yT = tile.posT[1];
 
-        if (board.isInside([neighborXT, neighborYT])) {
-            var neighborTile = tiles[neighborXT][neighborYT];
-            var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
-            var displayNeighborTileAsFixed = neighborTile[key];
-
-            return (displayNeighborTileAsFixed &&
-                    tile.color === neighborTile.color)
-                    ? 1
-                    : 0;
-        } else {
-            return 0;
+        if (yT > 0 && tiles[xT][yT - 1][key]) {
+            extents.top = Math.round(extents.top);
         }
-    };
 
-    var overlapsForFixedTile = function (tile) {
-        var overlaps = [overlapForFixedTile(tile, -1, 0),
-                        overlapForFixedTile(tile, 0, -1)]
+        if (xT > 0 && tiles[xT - 1][yT][key]) {
+            extents.left = Math.round(extents.left);
+        }
 
-        return overlaps;
+        if (yT + 1 < board.sideLenT && tiles[xT][yT + 1][key]) {
+            extents.bottom = Math.round(extents.bottom);
+        }
+
+        if (xT + 1 < board.sideLenT && tiles[xT + 1][yT][key]) {
+            extents.right = Math.round(extents.right);
+        }
     };
 
     var renderTile = function (ctx, tile) {
@@ -147,23 +144,31 @@ define([
         var tileSideLen = displayAsFixed
                 ? displayCSys.fixedTileSideLen
                 : displayCSys.tileSideLen;
+        var extents = {
+            top: pos[1],
+            left: pos[0],
+            bottom: pos[1] + tileSideLen,
+            right: pos[0] + tileSideLen
+        };
 
         if (tileIsInRotationAnim(posT)) {
             return; // don't show this tile, it's animated
         }
 
-        // overlap to avoid ugly thin black lines when there is no spacing:
-        var overlaps = displayAsFixed ? overlapsForFixedTile(tile) : [0, 0];
+        // to avoid ugly thin black lines when there is no spacing:
+        if (displayAsFixed) {
+            roundBordersBetweenFixedTiles(tile, extents);
+        }
 
         ctx.globalAlpha = tileIsSelected(posT) && selectionCanBeRotated()
             ? 0.5
             : 1;
         ctx.fillStyle = color;
         ctx.fillRect(
-            pos[0] - overlaps[0],
-            pos[1] - overlaps[1],
-            tileSideLen + overlaps[0],
-            tileSideLen + overlaps[1]
+            extents.left,
+            extents.top,
+            extents.right - extents.left,
+            extents.bottom - extents.top
         );
     };
 

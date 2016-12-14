@@ -19,8 +19,8 @@ define([
     };
 
     var adjustFontSize = function () {
-        var width = document.getElementById("game").clientWidth; // px
-        var size = Math.round(width / 16); // px
+        var width = document.getElementById("game").clientWidth;
+        var size = Math.round(width / 16);
         document.getElementsByTagName("body")[0].style.fontSize = size + "px";
     };
 
