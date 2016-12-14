@@ -14,7 +14,7 @@ define([
     var startTiles = tilesFactory.createFromCtx(null, null, 8);
     var isFinished = false; // true when a game is finished
     var tiles = startTiles.copy();
-    var lastRotation;
+    var lastRotation = null;
 
     // Updates `isFinished`.
     var updateIsFinished = function () {
@@ -40,6 +40,7 @@ define([
 
         reset: {value: function () {
             tiles = startTiles.copy();
+            lastRotation = null;
             isFinished = false;
         }},
 

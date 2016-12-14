@@ -219,7 +219,7 @@ define([
 
     var startRotationAnim = function () {
         var lastRotation = board.lastRotation;
-        if (lastRotation !== undefined) {
+        if (lastRotation !== null) {
             rotAnimCanvas.startAnim(lastRotation);
         }
     };
