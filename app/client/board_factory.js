@@ -9,14 +9,9 @@ define(function () {
 
     // Updates `internal.isFinished`.
     var updateIsFinished = function (internal, board) {
-        if (board.tiles.colorsAreEqualTo(board.endTiles)) {
-            if (!internal.isFinished) {
-                internal.isFinished = true;
-            }
-            // TODO: also consider draw when finishing
-        } else {
-            internal.isFinished = false;
-        }
+        internal.isFinished = false;
+
+        // TODO: also consider draw when finishing
     };
 
     // May also be used to reset.
@@ -36,7 +31,7 @@ define(function () {
         }},
     });
 
-    var create = function (name, startTiles, endTiles) {
+    var create = function (name, startTiles) {
         var internal = {};
 
         initInternal(internal, startTiles);
@@ -50,10 +45,6 @@ define(function () {
 
             tiles: {get: function () {
                 return internal.tiles;
-            }},
-
-            endTiles: {get: function () {
-                return endTiles;
             }},
 
             sideLenT: {get: function () {

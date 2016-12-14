@@ -21,13 +21,10 @@ define([
             var sideLenT = boardConfig.sideLenT;
             var startTiles = boardsSprites.tiles(boardConfig.startPosT,
                     sideLenT);
-            var endTiles = boardsSprites.tiles(boardConfig.endPosT,
-                    sideLenT);
 
             object.push(boardFactory.create(
                 boardConfig.name,
-                startTiles,
-                endTiles
+                startTiles
             ));
         });
     };
