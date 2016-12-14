@@ -4,17 +4,12 @@
 
 /*global define */
 
-define([
-    "tiles_factory"
-], function (
-    tilesFactory
-) {
+define(["tiles"], function (tiles) {
     "use strict";
 
-    var startTiles = tilesFactory.createFromCtx(null, null, 8);
     var isFinished = false; // true when a game is finished
-    var tiles = startTiles.copy();
     var lastRotation = null;
+    var numberOfRotation = 0;
 
     // Updates `isFinished`.
     var updateIsFinished = function () {
@@ -28,6 +23,11 @@ define([
             tiles.rotate(rotation);
             updateIsFinished();
             lastRotation = rotation;
+            numberOfRotation += 1;
+        }},
+
+        numberOfRotation: {get: function () {
+            return numberOfRotation;
         }},
 
         tiles: {get: function () {
@@ -39,9 +39,10 @@ define([
         }},
 
         reset: {value: function () {
-            tiles = startTiles.copy();
+            tiles.reset();
             lastRotation = null;
             isFinished = false;
+            numberOfRotation = 0;
         }},
 
         isFinished: {get: function () {

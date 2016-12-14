@@ -120,11 +120,6 @@ define(function () {
         }
     };
 
-    // Applies the inverse of the specified rotation.
-    var rotateInverse = function (tiles, rotation) {
-        rotate(tiles, rotation.inverse);
-    };
-
     // Returns the specified triple as RGB string.
     var rgb = function (imgData, offs) {
         return ("rgb(" +
@@ -133,12 +128,12 @@ define(function () {
                 imgData[offs + 2] + ")");
     };
 
-    var createColumnFromCtx = function (xT, sideLenT, rawDataColumn) {
+    var createColumnFromCtx = function (xT, rawDataColumn) {
         var tilesColumn = [];
         var offs;
         var yT = 0;
-        while (yT < sideLenT) {
-            offs = 4 * (yT * sideLenT + xT);
+        while (yT < 8) {
+            offs = 4 * (yT * 8 + xT);
             tilesColumn.push({
                 color: rawDataColumn[yT].color
             });
@@ -147,66 +142,10 @@ define(function () {
         return tilesColumn;
     };
 
-    var create;
-    create = function () {
-        var newTiles = Object.create([]);
-
-        return Object.defineProperties(newTiles, {
-            areEqualTo: {value: function (tiles) {
-                return areEqual(newTiles, tiles, function (tile1, tile2) {
-                    return tile1 === tile2;
-                });
-            }},
-
-            colorsAreEqualTo: {value: function (tiles) {
-                return areEqual(newTiles, tiles, function (tile1, tile2) {
-                    return tile1.color === tile2.color;
-                });
-            }},
-
-            widthT: {get: function () {
-                return newTiles.length;
-            }},
-
-            heightT: {get: function () {
-                return newTiles.widthT > 0
-                    ? newTiles[0].length
-                    : 0;
-            }},
-
-            // Returns a deep copy of the object.
-            copy: {value: function () {
-                var copiedTiles = create();
-
-                newTiles.forEach(function (thisColumn) {
-                    copiedTiles.push(thisColumn.slice());
-                });
-
-                return copiedTiles;
-            }},
-
-            rotate: {value: function (rotation) {
-                rotate(newTiles, rotation);
-            }},
-
-            rotateInverse: {value: function (rotation) {
-                rotateInverse(newTiles, rotation);
-            }}
-        });
-    };
-
-    // Creates tiles (each identified by a color specifier), describing the
-    // layout of a board. The data is read from the specified graphics
-    // context at the given position (upper left corner) and with the given
-    // side length.
-    //
-    // Reads color values of the image into a two dimensional array of hex
-    // values. Ignores the alpha channel.
-    //
     // Tile colors are stored in objects and not directly as value of a tile.
     // This makes it possible to differentiate between tiles that have the same
     // color (when comparing them using e.g. `===`).
-    var createFromCtx = function (ctx, posT, sideLenT) {
+    var init = function () {
         var rawData = [
                 [{"color":"rgb(0,127,255)"},
                  {"color":"rgb(0,0,0)"},
@@ -272,47 +211,37 @@ define(function () {
                  {"color":"rgb(255,127,0)"},
                  {"color":"rgb(0,0,0)"},
                  {"color":"rgb(255,127,0)"}]];
-        var tiles = create();
         var xT = 0;
-        while (xT < sideLenT) {
-            tiles.push(createColumnFromCtx(xT, sideLenT, rawData[xT]));
+
+        while (xT < 8) {
+            tiles.push(createColumnFromCtx(xT, rawData[xT]));
             xT += 1;
         }
-
-        return tiles;
     };
 
-    var createColumnFromImgData = function (xT, posT, sideLenT, imgWidth,
-            imgData) {
-        var tilesColumn = [];
-        var offs;
-        var yT = posT[1];
-        while (yT < posT[1] + sideLenT) {
-            offs = 4 * (yT * imgWidth + xT);
-            tilesColumn.push({
-                color: rgb(imgData, offs)
-            });
-            yT += 1;
-        }
-        return tilesColumn;
-    };
+    var tiles = Object.create([], {
+        widthT: {get: function () {
+            return tiles.length;
+        }},
 
-    // Creates tiles from image data, as created with png.js for Node.js:
-    //
-    // <https://github.com/devongovett/png.js/>
-    var createFromImgData = function (imgData, imgWidth, posT, sideLenT) {
-        var tiles = create();
-        var xT = posT[0];
-        while (xT < posT[0] + sideLenT) {
-            tiles.push(createColumnFromImgData(xT, posT, sideLenT, imgWidth,
-                    imgData));
-            xT += 1;
-        }
-        return tiles;
-    };
+        heightT: {get: function () {
+            return tiles.widthT > 0
+                ? tiles[0].length
+                : 0;
+        }},
 
-    return Object.create(null, {
-        createFromCtx: {value: createFromCtx},
-        createFromImgData: {value: createFromImgData}
+        rotate: {value: function (rotation) {
+            rotate(tiles, rotation);
+        }},
+
+        rotateInverse: {value: function (rotation) {
+            rotateInverse(tiles, rotation);
+        }},
+
+        reset: {value: init}
     });
+
+    init();
+
+    return tiles;
 });

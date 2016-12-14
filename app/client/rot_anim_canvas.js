@@ -5,12 +5,11 @@
 /*global define */
 
 define([
-    "board", "display_c_sys", "display_canvas_factory"
-], function (board, displayCSys, displayCanvasFactory) {
+    "tiles", "board", "display_c_sys", "display_canvas_factory"
+], function (tiles, board, displayCSys, displayCanvasFactory) {
     "use strict";
 
     var sideLen;
-    var tiles; // tiles, in position *after* rotation
     var animIsRunning;
     var rectT; // tiles inside of this rectangle are rotated
     var startTime; // time when animation started, in milliseconds
@@ -126,7 +125,6 @@ define([
 
         // Starts new animation, showing the last rotation.
         startAnim: {value: function (lastRotation) {
-            tiles = board.tiles.copy();
             rectT = lastRotation.rectT;
             animIsRunning = true;
             startTime = Date.now();

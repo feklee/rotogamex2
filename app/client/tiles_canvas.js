@@ -5,15 +5,14 @@
 /*global define */
 
 define([
-    "board", "rubber_band_canvas", "rot_anim_canvas", "arrow_canvas",
+    "tiles", "board", "rubber_band_canvas", "rot_anim_canvas", "arrow_canvas",
     "display_c_sys", "display_canvas_factory", "rotation_factory",
     "rect_t_factory"
-], function (board, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
+], function (tiles, board, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
         displayCSys, displayCanvasFactory, rotationFactory, rectTFactory) {
     "use strict";
 
     var sideLen;
-    var tiles;
     var needsToBeRendered = true;
     var selectedRectT; // when dragged: currently selected rectangle
     var draggedToTheRight; // when dragged: current drag direction
@@ -21,6 +20,7 @@ define([
     var rotation;
     var initRotAnimHasToBeTriggered = true;
     var el = document.querySelector("canvas.tiles");
+    var processedNumberOfRotation = 0;
 
     var updateRotation = function () {
         if (selectedRectT === undefined) {
@@ -31,10 +31,6 @@ define([
                 draggedToTheRight
             );
         }
-    };
-
-    var tilesNeedUpdate = function () {
-        return tiles === undefined || !board.tiles.areEqualTo(tiles);
     };
 
     var animIsRunningNeedsUpdate = function () {
@@ -224,20 +220,6 @@ define([
         }
     };
 
-    var updateTiles = function () {
-        var init = tiles === undefined;
-
-        tiles = board.tiles.copy();
-
-        if (!init) {
-            startRotationAnim();
-        } // else: change in tiles not due to rotation
-
-        updateRubberBandCanvasVisibility();
-
-        arrowCanvas.hide(); // necessary e.g. after undoing finished
-    };
-
     // Triggers a rotation animation that is shown when the canvas is first
     // displayed. This rotation serves as a hint concerning how the game works.
     var triggerInitRotAnim = function () {
@@ -257,6 +239,10 @@ define([
         sideLen = el.clientWidth;
     };
 
+    var lastRotationHasBeenProcessed = function () {
+        return processedNumberOfRotation !== board.numberOfRotation;
+    };
+
     rubberBandCanvas.onDrag = onRubberBandDrag;
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 
@@ -265,10 +251,12 @@ define([
     return Object.create(tilesCanvas, {
         animStep: {value: function () {
             obtainSideLen();
+            updateRubberBandCanvasVisibility(); // TODO: move to rubberbandcanvas?
 
-            if (tilesNeedUpdate()) {
-                updateTiles();
+            if (lastRotationHasBeenProcessed()) {
+                startRotationAnim();
                 needsToBeRendered = true;
+                processedNumberOfRotation = board.numberOfRotation;
             }
 
             if (initRotAnimHasToBeTriggered) {
