@@ -9,16 +9,29 @@ define(["boards"], function (boards) {
         boards.selected.reset();
     };
 
-    var setUpResetButton = function (playerNumber) {
-        var el = document.querySelector(".player-" + playerNumber +
-                                        ".toolbar .reset button");
+    var setUpResetButton = function (toolbarEl) {
+        var el = toolbarEl.querySelector(".reset button");
         el.addEventListener("click", onResetClick);
     };
 
+    var renderScore = function (toolbarEl, score) {
+        var el = toolbarEl.querySelector(".score");
+        el.innerHTML = score;
+    };
+
     return function (playerNumber) {
-        setUpResetButton(playerNumber);
+        var score = 0;
+        var toolbarEl = document.querySelector(".player-" + playerNumber +
+                                               ".toolbar");
+
+        setUpResetButton(toolbarEl);
+        renderScore(toolbarEl, score);
 
         return Object.create(null, {
+            increaseScore: {value: function () {
+                score += 1;
+                renderScore(toolbarEl, score);
+            }}
         });
     };
 });
