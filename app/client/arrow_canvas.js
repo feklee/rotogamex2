@@ -64,6 +64,8 @@ define([
         var u = tsl / 14;
 
         ctx.lineWidth = u;
+        ctx.strokeStyle = "white";
+        ctx.fillStyle = "white";
         renderArc(ctx, x, y, u, angleDeg);
         renderTriangle(ctx, x, y, u, angleDeg);
     };
