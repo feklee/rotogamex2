@@ -21,6 +21,14 @@ define([
         window.requestAnimationFrame(animStep);
     };
 
+    var adjustFontSize = function () {
+        var width = document.getElementById("game").clientWidth; // px
+        var size = Math.round(width / 16); // px
+        document.getElementsByTagName("body")[0].style.fontSize = size + "px";
+    };
+
+    window.addEventListener("resize", adjustFontSize);
+
     var hideLoadScreen = function () {
         document.getElementById("load-screen").style.display = "none";
     };
@@ -48,6 +56,8 @@ define([
 
     var onDocumentComplete = function () {
         loaded = true;
+
+        adjustFontSize();
 
         setUpResetButton();
 
