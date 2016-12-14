@@ -5,8 +5,8 @@
 /*global define */
 
 define([
-    "boards", "display_c_sys", "display_canvas_factory"
-], function (boards, displayCSys, displayCanvasFactory) {
+    "board", "display_c_sys", "display_canvas_factory"
+], function (board, displayCSys, displayCanvasFactory) {
     "use strict";
 
     var sideLen;
@@ -17,7 +17,6 @@ define([
     var startAngle; // rad
     var angle; // current angle, in rad
     var direction; // rotation direction (-1, or +1)
-    var board;
     var el = document.querySelector("canvas.rot-anim");
 
     var renderTile = function (ctx, posT, rotCenter) {
@@ -127,7 +126,6 @@ define([
 
         // Starts new animation, showing the last rotation.
         startAnim: {value: function (lastRotation) {
-            board = boards.selected;
             tiles = board.tiles.copy();
             rectT = lastRotation.rectT;
             animIsRunning = true;

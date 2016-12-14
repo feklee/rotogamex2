@@ -4,24 +4,21 @@
 
 /*global define */
 
-define(["boards"], function (boards) {
+define(["board"], function (board) {
     "use strict";
 
     var tileSideLen = 0;
     var fixedTileSideLen = 0;
     var spacing = 0;
-    var board;
     var sideLen;
 
     var updateDimensions = function () {
         var sideLenT;
 
-        if (board !== undefined) {
-            sideLenT = board.sideLenT;
-            spacing = 0.1 * sideLen / sideLenT;
-            tileSideLen = (sideLen - spacing * sideLenT) / sideLenT;
-            fixedTileSideLen = sideLen / sideLenT;
-        }
+        sideLenT = board.sideLenT;
+        spacing = 0.1 * sideLen / sideLenT;
+        tileSideLen = (sideLen - spacing * sideLenT) / sideLenT;
+        fixedTileSideLen = sideLen / sideLenT;
     };
 
     var coordFromCoordT = function (coordT, tileIsFixed = false) {
@@ -58,10 +55,6 @@ define(["boards"], function (boards) {
         animStep: {value: function () {
             if (sideLen === undefined) {
                 obtainSideLen();
-            }
-            if (boards.selected !== board) {
-                board = boards.selected;
-                updateDimensions();
             }
         }},
 

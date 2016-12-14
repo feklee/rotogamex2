@@ -2,11 +2,11 @@
 
 /*global define */
 
-define(["boards"], function (boards) {
+define(["board"], function (board) {
     "use strict";
 
     var onResetClick = function () {
-        boards.selected.reset();
+        board.reset();
     };
 
     var setUpResetButton = function (toolbarEl) {

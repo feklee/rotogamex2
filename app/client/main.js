@@ -5,8 +5,8 @@
 /*global define, window */
 
 define([
-    "display", "boards", "util", "player_constructor", "vendor/rAF"
-], function (display, boards, util, playerConstructor) {
+    "display", "util", "player_constructor", "vendor/rAF"
+], function (display, util, playerConstructor) {
     "use strict";
 
     var loaded = false;
@@ -58,15 +58,10 @@ define([
                     // continues with animation
     };
 
-    var onBoardsLoaded = function () {
-        util.onceDocumentIsComplete(onDocumentComplete);
-    };
-
     util.immediatelyRefreshAppCache();
 
     util.onceDocumentIsInteractive(function () {
         preventPageDrag();
-        boards.load();
-        onBoardsLoaded();
+        util.onceDocumentIsComplete(onDocumentComplete);
     });
 });

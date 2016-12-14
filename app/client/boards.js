@@ -12,20 +12,11 @@ define([
 ) {
     "use strict";
 
-    var selectedI = 0;
     var object;
 
     var createBoards = function () {
-        var startTiles = tilesFactory.createFromCtx(
-            null,
-            null,
-            8
-        );
-
-        object.push(boardFactory.create(
-            "",
-            startTiles
-        ));
+        var startTiles = tilesFactory.createFromCtx(null, null, 8);
+        object.push(boardFactory.create("", startTiles));
     };
 
     object = Object.create([], {
@@ -34,17 +25,8 @@ define([
         }},
 
         selected: {get: function () {
-            return object[selectedI];
-        }},
-
-        selectedI: {
-            get: function () {
-                return selectedI;
-            },
-            set: function (newSelectedI) {
-                selectedI = newSelectedI;
-            }
-        }
+            return object[0];
+        }}
     });
 
     return object;

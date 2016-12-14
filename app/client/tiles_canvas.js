@@ -5,16 +5,15 @@
 /*global define */
 
 define([
-    "boards", "rubber_band_canvas", "rot_anim_canvas", "arrow_canvas",
+    "board", "rubber_band_canvas", "rot_anim_canvas", "arrow_canvas",
     "display_c_sys", "display_canvas_factory", "rotation_factory",
     "rect_t_factory"
-], function (boards, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
+], function (board, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
         displayCSys, displayCanvasFactory, rotationFactory, rectTFactory) {
     "use strict";
 
     var sideLen;
     var tiles;
-    var board;
     var needsToBeRendered = true;
     var selectedRectT; // when dragged: currently selected rectangle
     var draggedToTheRight; // when dragged: current drag direction
@@ -43,10 +42,6 @@ define([
                 animIsRunning !== rotAnimCanvas.animIsRunning);
     };
 
-    var boardNeedsUpdate = function () {
-        return board === undefined || board !== boards.selected;
-    };
-
     var onRubberBandDrag = function (newSelectedRectT, newDraggedToTheRight) {
         if (selectedRectT === undefined ||
                 !newSelectedRectT.isEqualTo(selectedRectT) ||
@@ -65,7 +60,6 @@ define([
     };
 
     var updateRubberBandCanvasVisibility = function () {
-        board = boards.selected;
         if (board.isFinished) {
             rubberBandCanvas.hide();
         } else {
@@ -96,8 +90,8 @@ define([
         if (rotation !== undefined &&
                 selectionCanBeRotated() &&
                 rotation.makesSense &&
-                !boards.selected.isFinished) {
-            boards.selected.rotate(rotation);
+                !board.isFinished) {
+            board.rotate(rotation);
         }
 
         updateRubberBandCanvasVisibility();
@@ -230,10 +224,12 @@ define([
         }
     };
 
-    var updateTiles = function (boardHasChanged) {
+    var updateTiles = function () {
+        var init = tiles === undefined;
+
         tiles = board.tiles.copy();
 
-        if (!boardHasChanged) {
+        if (!init) {
             startRotationAnim();
         } // else: change in tiles not due to rotation
 
@@ -264,22 +260,14 @@ define([
     rubberBandCanvas.onDrag = onRubberBandDrag;
     rubberBandCanvas.onDragEnd = onRubberBandDragEnd;
 
+    needsToBeRendered = true;
+
     return Object.create(tilesCanvas, {
         animStep: {value: function () {
-            var boardHasChanged;
-
             obtainSideLen();
 
-            if (boardNeedsUpdate()) {
-                needsToBeRendered = true;
-                board = boards.selected;
-                boardHasChanged = true;
-            } else {
-                boardHasChanged = false;
-            }
-
             if (tilesNeedUpdate()) {
-                updateTiles(boardHasChanged);
+                updateTiles();
                 needsToBeRendered = true;
             }
 
