@@ -116,14 +116,11 @@ define([
     var overlapForFixedTile = function (posT) {
         var xT = posT[0];
         var yT = posT[1];
-        var overlapX = (xT > 0 &&
-                        tiles[xT - 1][yT].isFixed &&
-                        !tileIsInRotationAnim([xT - 1, yT]))
+        var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
+        var overlapX = (xT > 0 && tiles[xT - 1][yT][key])
                 ? 1
                 : 0;
-        var overlapY = (yT > 0 &&
-                        tiles[xT][yT - 1].isFixed &&
-                        !tileIsInRotationAnim([xT, yT - 1]))
+        var overlapY = (yT > 0 && tiles[xT][yT - 1][key])
                 ? 1
                 : 0;
         return [overlapX, overlapY];
@@ -132,10 +129,12 @@ define([
     var renderTile = function (ctx, posT) {
         var xT = posT[0];
         var yT = posT[1];
-        var isFixed = tiles[xT][yT].isFixed;
-        var pos = displayCSys.posFromPosT(posT, isFixed);
+        var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
+        var tile = tiles[xT][yT];
+        var displayAsFixed = tile[key];
+        var pos = displayCSys.posFromPosT(posT, displayAsFixed);
         var color = tiles[xT][yT].color;
-        var tileSideLen = isFixed
+        var tileSideLen = displayAsFixed
                 ? displayCSys.fixedTileSideLen
                 : displayCSys.tileSideLen;
 
@@ -144,7 +143,7 @@ define([
         }
 
         // overlap to avoid ugly thin black lines when there is no spacing:
-        var overlap = isFixed ? overlapForFixedTile(posT) : [0, 0];
+        var overlap = displayAsFixed ? overlapForFixedTile(posT) : [0, 0];
 
         ctx.globalAlpha = tileIsSelected(posT) && selectionCanBeRotated()
             ? 0.5
@@ -188,11 +187,6 @@ define([
         if (renderAsFinished) {
             displayCSys.enableSpacing();
         }
-    };
-
-    rotAnimCanvas.onAnimFinished = function () {
-//        tiles.markFixedTiles(); // TODO: bad idea - because then rotation could be superceeded by impossible rotation
-        needsToBeRendered = true;
     };
 
     var startRotationAnim = function () {

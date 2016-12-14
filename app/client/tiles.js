@@ -96,6 +96,7 @@ define(function () {
 
     var markFixedTilesInColumn = function (column, xT) {
         column.forEach(function (tile, yT) {
+            tile.wasFixed = tile.isFixed;
             tile.isFixed = tileIsFixed(xT, yT);
         });
     };
@@ -144,6 +145,7 @@ define(function () {
             offs = 4 * (yT * sideLenT + xT);
             tilesColumn.push({
                 color: rawDataColumn[yT].color,
+                wasFixed: false,
                 isFixed: false
             });
             yT += 1;
@@ -230,7 +232,6 @@ define(function () {
 
     var tiles = Object.create([], {
         rotate: {value: rotate},
-
         reset: {value: init}
     });
 
