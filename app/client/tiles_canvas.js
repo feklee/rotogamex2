@@ -66,7 +66,7 @@ define([
 
     var updateRubberBandCanvasVisibility = function () {
         board = boards.selected;
-        if (board.isFinished || !board.rotationIsPossible) {
+        if (board.isFinished) {
             rubberBandCanvas.hide();
         } else {
             rubberBandCanvas.show(); // necessary e.g. after undoing finished

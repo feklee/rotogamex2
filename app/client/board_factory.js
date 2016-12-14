@@ -13,6 +13,7 @@ define(function () {
             if (!internal.isFinished) {
                 internal.isFinished = true;
             }
+            // TODO: also consider draw when finishing
         } else {
             internal.isFinished = false;
         }
@@ -24,40 +25,15 @@ define(function () {
             internal.startTiles = startTiles;
         }
         internal.tiles = internal.startTiles.copy();
-        internal.rotations = []; // for undo, for counting, ...
-        internal.futureRotations = []; // for redo
-        internal.lastRotation = null;
         internal.isFinished = false; // true when game is finished
     };
 
     var prototype = Object.create(null, {
         rotate: {value: function (board, internal, rotation) {
-            internal.rotations.push(rotation);
-            internal.futureRotations.length = 0; // resets redo history
             board.tiles.rotate(rotation);
             updateIsFinished(internal, board);
             internal.lastRotation = rotation;
         }},
-
-        undo: {value: function (board, internal) {
-            var rotation = internal.rotations.pop();
-            if (rotation !== undefined) {
-                internal.futureRotations.push(rotation);
-                board.tiles.rotateInverse(rotation);
-                updateIsFinished(internal, board);
-                internal.lastRotation = rotation.inverse;
-            } // else: no more undo
-        }},
-
-        redo: {value: function (board, internal) {
-            var rotation = internal.futureRotations.pop();
-            if (rotation !== undefined) {
-                internal.rotations.push(rotation);
-                board.tiles.rotate(rotation);
-                updateIsFinished(internal, board);
-                internal.lastRotation = rotation;
-            } // else: no more redo
-        }}
     });
 
     var create = function (name, startTiles, endTiles) {
@@ -82,34 +58,6 @@ define(function () {
 
             sideLenT: {get: function () {
                 return internal.tiles.length;
-            }},
-
-            nRotations: {get: function () {
-                return internal.rotations.length;
-            }},
-
-            rotationIsPossible: {get: function () {
-                return internal.rotations.length < 99;
-            }},
-
-            undoIsPossible: {get: function () {
-                return internal.rotations.length > 0;
-            }},
-
-            undo: {value: function () {
-                if (board.undoIsPossible) {
-                    prototype.undo(board, internal);
-                }
-            }},
-
-            redoIsPossible: {get: function () {
-                return internal.futureRotations.length > 0;
-            }},
-
-            redo: {value: function () {
-                if (board.redoIsPossible) {
-                    prototype.redo(board, internal);
-                }
             }},
 
             reset: {value: function () {
