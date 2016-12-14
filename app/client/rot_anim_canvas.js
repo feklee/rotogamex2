@@ -17,6 +17,7 @@ define([
     var angle; // current angle, in rad
     var direction; // rotation direction (-1, or +1)
     var el = document.querySelector("canvas.rot-anim");
+    var onAnimFinished = function () {};
 
     var renderTile = function (ctx, posT, rotCenter) {
         var pos = displayCSys.posFromPosT(posT);
@@ -87,6 +88,7 @@ define([
 
         if (rotationIsFinished()) {
             angle = 0; // avoids rotation beyond 0 (would look ugly)
+            onAnimFinished();
         }
     };
 
@@ -131,6 +133,10 @@ define([
             direction = -lastRotation.direction;
             startAngle = lastRotation.angleRad;
             rotAnimCanvas.show();
+        }},
+
+        onAnimFinished: {set: function (x) {
+            onAnimFinished = x;
         }}
     });
 });

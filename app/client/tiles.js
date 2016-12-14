@@ -11,33 +11,7 @@ if (typeof define !== "function") {
 define(function () {
     "use strict";
 
-    var columnsAreEqual = function (tiles1Column, tiles2Column, isEqual) {
-        var yT = 0;
-        while (yT < tiles2Column.length) {
-            if (!isEqual(tiles2Column[yT], tiles1Column[yT])) {
-                return false;
-            }
-            yT += 1;
-        }
-        return true;
-    };
-
-    var areEqual = function (tiles1, tiles2, isEqual) {
-        if (tiles2.widthT !== tiles1.widthT ||
-                tiles2.heightT !== tiles1.heightT) {
-            return false;
-        }
-
-        var xT = 0;
-        while (xT < tiles2.length) {
-            if (!columnsAreEqual(tiles1[xT], tiles2[xT], isEqual)) {
-                return false;
-            }
-            xT += 1;
-        }
-
-        return true;
-    };
+    var sideLenT = 8;
 
     var selectedTilesInColumn = function (tiles, xT, y1T, y2T) {
         var sTilesColumn = [];
@@ -75,7 +49,7 @@ define(function () {
     var rotateColumnWithRotator = function (xT, tiles, sTiles, x1T, y1T, y2T,
             dimensions, rotator) {
         var yT = y1T;
-        while (yT <= y2T) {
+        while  (yT <= y2T) {
             tiles[xT][yT] = rotator(sTiles, xT - x1T, yT - y1T, dimensions);
             yT += 1;
         }
@@ -100,12 +74,44 @@ define(function () {
         }
     };
 
+    var tileSticksToBorder = function (xT, yT, color, direction) {
+        var tileIsOutsideBoard = yT >= sideLenT || yT < 0;
+
+        if (tileIsOutsideBoard) {
+            return true;
+        }
+
+        if (tiles[xT][yT].isFixed) {
+            return true;
+        }
+
+        return (tiles[xT][yT].color === color) &&
+            tileSticksToBorder(xT, yT + direction, color, direction);
+    };
+
+    var tileIsFixed = function (xT, yT) {
+        return tileSticksToBorder(xT, yT, "rgb(255,127,0)", -1) ||
+            tileSticksToBorder(xT, yT, "rgb(0,127,255)", 1);
+    };
+
+    var markFixedTilesInColumn = function (column, xT) {
+        column.forEach(function (tile, yT) {
+            tile.isFixed = tileIsFixed(xT, yT);
+        });
+    };
+
+    var markFixedTiles = function () {
+        tiles.forEach(function (column, xT) {
+            markFixedTilesInColumn(column, xT);
+        });
+    };
+
     // Rotates the tiles in the specified rectangle in the specified direction:
     // clockwise if `cw` is true
     //
     // The rectangle is defined by its top left and its bottom right corner, in
     // that order.
-    var rotate = function (tiles, rotation) {
+    var rotate = function (rotation) {
         var rectT = rotation.rectT;
         var cw = rotation.cw;
 
@@ -118,6 +124,8 @@ define(function () {
         } else {
             rotateWithRotator(tiles, rectT, rotator180);
         }
+
+        markFixedTiles();
     };
 
     // Returns the specified triple as RGB string.
@@ -132,19 +140,17 @@ define(function () {
         var tilesColumn = [];
         var offs;
         var yT = 0;
-        while (yT < 8) {
-            offs = 4 * (yT * 8 + xT);
+        while (yT < sideLenT) {
+            offs = 4 * (yT * sideLenT + xT);
             tilesColumn.push({
-                color: rawDataColumn[yT].color
+                color: rawDataColumn[yT].color,
+                isFixed: false
             });
             yT += 1;
         }
         return tilesColumn;
     };
 
-    // Tile colors are stored in objects and not directly as value of a tile.
-    // This makes it possible to differentiate between tiles that have the same
-    // color (when comparing them using e.g. `===`).
     var init = function () {
         var rawData = [
                 [{"color":"rgb(0,127,255)"},
@@ -214,30 +220,16 @@ define(function () {
         var xT = 0;
 
         tiles.length = 0;
-        while (xT < 8) {
+        while (xT < sideLenT) {
             tiles.push(createColumnFromCtx(xT, rawData[xT]));
             xT += 1;
         }
+
+        markFixedTiles();
     };
 
     var tiles = Object.create([], {
-        widthT: {get: function () {
-            return tiles.length;
-        }},
-
-        heightT: {get: function () {
-            return tiles.widthT > 0
-                ? tiles[0].length
-                : 0;
-        }},
-
-        rotate: {value: function (rotation) {
-            rotate(tiles, rotation);
-        }},
-
-        rotateInverse: {value: function (rotation) {
-            rotateInverse(tiles, rotation);
-        }},
+        rotate: {value: rotate},
 
         reset: {value: init}
     });

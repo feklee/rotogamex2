@@ -68,7 +68,7 @@ define([
             return false;
         }
 
-        return tileIsFixed([leftXT, yT]) ||
+        return tiles[leftXT][yT].isFixed ||
             rowContainsFixedTile(leftXT + 1, rightXT, yT);
     };
 
@@ -109,56 +109,32 @@ define([
                 posT[1] <= selectedRectT[1][1]);
     };
 
-    var tileSticksToBorder = function (xT, yT, color, direction) {
-        var tileIsOutsideBoard = yT >= tiles.heightT || yT < 0;
-
-        if (tileIsOutsideBoard) {
-            return true;
-        }
-
-        return (tiles[xT][yT].color === color) &&
-            tileSticksToBorder(xT, yT + direction, color, direction);
-    };
-
-    var tileIsFixed = function (posT) {
-        var xT = posT[0];
-        var yT = posT[1];
-
-        return tileSticksToBorder(xT, yT, "rgb(255,127,0)", -1) ||
-            tileSticksToBorder(xT, yT, "rgb(0,127,255)", 1);
-    };
-
-    var leftT = function (posT) {
-        return [posT[0] - 1, posT[1]];
-    };
-
-    var aboveT = function (posT) {
-        return [posT[0], posT[1] - 1];
-    };
-
     var tileIsInRotationAnim = function (posT) {
         return rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT);
     };
 
     var overlapForFixedTile = function (posT) {
-        var overlapX = (posT[0] > 0 &&
-                        tileIsFixed(leftT(posT)) &&
-                        !tileIsInRotationAnim(leftT(posT)))
+        var xT = posT[0];
+        var yT = posT[1];
+        var overlapX = (xT > 0 &&
+                        tiles[xT - 1][yT].isFixed &&
+                        !tileIsInRotationAnim([xT - 1, yT]))
                 ? 1
                 : 0;
-        var overlapY = (posT[1] > 0 &&
-                        tileIsFixed(aboveT(posT)) &&
-                        !tileIsInRotationAnim(aboveT(posT)))
+        var overlapY = (yT > 0 &&
+                        tiles[xT][yT - 1].isFixed &&
+                        !tileIsInRotationAnim([xT, yT - 1]))
                 ? 1
                 : 0;
         return [overlapX, overlapY];
     };
 
     var renderTile = function (ctx, posT) {
-        var isFixed = tileIsFixed(posT);
+        var xT = posT[0];
+        var yT = posT[1];
+        var isFixed = tiles[xT][yT].isFixed;
         var pos = displayCSys.posFromPosT(posT, isFixed);
-        console.log(posT[0], posT[1]); // TODO
-        var color = tiles[posT[0]][posT[1]].color;
+        var color = tiles[xT][yT].color;
         var tileSideLen = isFixed
                 ? displayCSys.fixedTileSideLen
                 : displayCSys.tileSideLen;
@@ -212,6 +188,11 @@ define([
         if (renderAsFinished) {
             displayCSys.enableSpacing();
         }
+    };
+
+    rotAnimCanvas.onAnimFinished = function () {
+//        tiles.markFixedTiles(); // TODO: bad idea - because then rotation could be superceeded by impossible rotation
+        needsToBeRendered = true;
     };
 
     var startRotationAnim = function () {
