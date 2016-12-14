@@ -5,8 +5,8 @@
 /*global define, window */
 
 define([
-    "display", "util", "player_constructor", "vendor/rAF"
-], function (display, util, playerConstructor) {
+    "display", "util", "toolbar_initializer", "vendor/rAF"
+], function (display, util, toolbarInitializer) {
     "use strict";
 
     var loaded = false;
@@ -45,8 +45,8 @@ define([
     var onDocumentComplete = function () {
         loaded = true;
 
-        playerConstructor(1);
-        playerConstructor(2);
+        toolbarInitializer(1);
+        toolbarInitializer(2);
 
         adjustFontSize();
 

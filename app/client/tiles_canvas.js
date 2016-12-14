@@ -113,27 +113,35 @@ define([
         return rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT);
     };
 
-    var overlapForFixedTile = function (posT) {
-        var xT = posT[0];
-        var yT = posT[1];
-        var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
-        var overlapX = (xT > 0 && tiles[xT - 1][yT][key])
-                ? 1
-                : 0;
-        var overlapY = (yT > 0 && tiles[xT][yT - 1][key])
-                ? 1
-                : 0;
-        return [overlapX, overlapY];
+    var overlapForFixedTile = function (tile, xDir, yDir) {
+        var xT = tile.posT[0];
+        var yT = tile.posT[1];
+
+        if (xT > 0 && yT > 0) {
+            var neighboringTile = tiles[xT - xDir][yT - yDir];
+            var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
+            var displayNeighboringTileAsFixed = neighboringTile[key];
+
+            return (displayNeighboringTileAsFixed &&
+                    tile.color === neighboringTile.color)
+                    ? 1
+                    : 0;
+        } else {
+            return 0;
+        }
     };
 
-    var renderTile = function (ctx, posT) {
-        var xT = posT[0];
-        var yT = posT[1];
+    var overlapsForFixedTile = function (tile) {
+        return [overlapForFixedTile(tile, 1, 0),
+                overlapForFixedTile(tile, 0, 1)]
+    };
+
+    var renderTile = function (ctx, tile) {
+        var posT = tile.posT;
         var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
-        var tile = tiles[xT][yT];
         var displayAsFixed = tile[key];
         var pos = displayCSys.posFromPosT(posT, displayAsFixed);
-        var color = tiles[xT][yT].color;
+        var color = tile.color;
         var tileSideLen = displayAsFixed
                 ? displayCSys.fixedTileSideLen
                 : displayCSys.tileSideLen;
@@ -143,30 +151,27 @@ define([
         }
 
         // overlap to avoid ugly thin black lines when there is no spacing:
-        var overlap = displayAsFixed ? overlapForFixedTile(posT) : [0, 0];
+        var overlaps = displayAsFixed ? overlapsForFixedTile(tile) : [0, 0];
 
         ctx.globalAlpha = tileIsSelected(posT) && selectionCanBeRotated()
             ? 0.5
             : 1;
         ctx.fillStyle = color;
         ctx.fillRect(
-            pos[0] - overlap[0],
-            pos[1] - overlap[1],
-            tileSideLen + overlap[0],
-            tileSideLen + overlap[1]
+            pos[0] - overlaps[0],
+            pos[1] - overlaps[1],
+            tileSideLen + overlaps[0],
+            tileSideLen + overlaps[1]
         );
     };
 
-    var renderColumn = function (sideLenT, ctx, xT) {
-        var yT = 0;
-        while (yT < sideLenT) {
-            renderTile(ctx, [xT, yT]);
-            yT += 1;
-        }
+    var renderColumn = function (ctx, column) {
+        column.forEach(function (tile) {
+            renderTile(ctx, tile);
+        });
     };
 
     var render = function () {
-        var sideLenT = board.sideLenT;
         var ctx = el.getContext("2d");
         var renderAsFinished = board.isFinished &&
                 !rotAnimCanvas.animIsRunning;
@@ -178,11 +183,9 @@ define([
             displayCSys.disableSpacing();
         }
 
-        var xT = 0;
-        while (xT < sideLenT) {
-            renderColumn(sideLenT, ctx, xT);
-            xT += 1;
-        }
+        tiles.forEach(function (column) {
+            renderColumn(ctx, column);
+        });
 
         if (renderAsFinished) {
             displayCSys.enableSpacing();

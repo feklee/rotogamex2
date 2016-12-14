@@ -51,6 +51,7 @@ define(function () {
         var yT = y1T;
         while  (yT <= y2T) {
             tiles[xT][yT] = rotator(sTiles, xT - x1T, yT - y1T, dimensions);
+            tiles[xT][yT].posT = [xT, yT];
             yT += 1;
         }
     };
@@ -144,6 +145,7 @@ define(function () {
         while (yT < sideLenT) {
             offs = 4 * (yT * sideLenT + xT);
             tilesColumn.push({
+                posT: [xT, yT],
                 color: rawDataColumn[yT].color,
                 wasFixed: false,
                 isFixed: false
