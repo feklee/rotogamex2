@@ -33,10 +33,11 @@ html(lang="en", manifest="manifest.appcache")
 
   body
     #game
-      .player.one
-        .toolbar
-          span.score 003
-          button.reset 
+      .player-1.toolbar
+        .active
+        .score 000
+        .reset
+          button 
 
       #display
         canvas(class="tiles")
@@ -44,9 +45,11 @@ html(lang="en", manifest="manifest.appcache")
         canvas(class="rot-anim")
         canvas(class="rubber-band")
 
-      .player.two
-        .toolbar
-          button.reset 
+      .player-2.toolbar
+        .active
+        .score 000
+        .reset
+          button 
 
     #load-screen
       div

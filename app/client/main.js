@@ -50,7 +50,7 @@ define([
     };
 
     var setUpResetButton = function () {
-        var el = document.querySelector("button.reset");
+        var el = document.querySelector(".reset button");
         el.addEventListener("click", onResetClick);
     };
 

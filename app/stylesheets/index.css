@@ -106,28 +106,39 @@ button:disabled {
     color: #777;
 }
 
-.player {
+.toolbar {
     flex: auto;
     display: flex;
-    flex-direction: column;
+    align-items: flex-end;
 }
 
-.toolbar {
-    height: 0;
-    padding-bottom: 20%;
+.toolbar > * {
+    box-sizing: border-box;
+    padding: 1%;
 }
 
-.player.one {
+.player-1.toolbar {
     background: rgb(255,127,0);
+    transform: rotate(180deg);
 }
 
-.player.one .toolbar {
-    background: gray;
-/*    transform: rotate(180deg);*/
-}
-
-.player.two {
+.player-2.toolbar {
     background: rgb(0,127,255);
+}
+
+.toolbar .active, .toolbar .reset {
+    width: 20%;
+}
+
+.toolbar .score {
+    width: 60%;
+    text-align: center;
+    font-size: 150%;
+}
+
+.toolbar .reset {
+    text-align: right;
+    font-family: 'fontello';
 }
 
 #display {
