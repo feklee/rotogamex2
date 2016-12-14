@@ -4,10 +4,14 @@
 
 /*global define */
 
-define(["boards"], function (boards) {
+define([
+    "tiles_factory", "board_factory"
+], function (
+    tilesFactory,
+    boardFactory
+) {
     "use strict";
 
-    boards.load();
-
-    return boards.selected;
+    var startTiles = tilesFactory.createFromCtx(null, null, 8);
+    return boardFactory.create("", startTiles);
 });
