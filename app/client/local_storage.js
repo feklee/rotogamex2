@@ -7,7 +7,7 @@
 define(function () {
     "use strict";
 
-    var namespace = "rotogamesq";
+    var namespace = "rotogamex2";
 
     return Object.create(null, {
         // Returns null, if object cannot be retrieved from local storage.
