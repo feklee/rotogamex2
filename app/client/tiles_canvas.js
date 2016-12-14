@@ -157,6 +157,7 @@ define([
     var renderTile = function (ctx, posT) {
         var isFixed = tileIsFixed(posT);
         var pos = displayCSys.posFromPosT(posT, isFixed);
+        console.log(posT[0], posT[1]); // TODO
         var color = tiles[posT[0]][posT[1]].color;
         var tileSideLen = isFixed
                 ? displayCSys.fixedTileSideLen

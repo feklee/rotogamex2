@@ -213,6 +213,7 @@ define(function () {
                  {"color":"rgb(255,127,0)"}]];
         var xT = 0;
 
+        tiles.length = 0;
         while (xT < 8) {
             tiles.push(createColumnFromCtx(xT, rawData[xT]));
             xT += 1;
