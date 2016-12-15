@@ -11,6 +11,7 @@ define(["tiles"], function (tiles) {
     var lastRotation = null;
     var numberOfRotation = 0;
     var sideLenT = tiles.length;
+    var onReset = function () {};
 
     // Updates `isFinished`.
     var updateIsFinished = function () {
@@ -44,6 +45,7 @@ define(["tiles"], function (tiles) {
             lastRotation = null;
             isFinished = false;
             numberOfRotation = 0;
+            onReset();
         }},
 
         isFinished: {get: function () {
@@ -57,5 +59,9 @@ define(["tiles"], function (tiles) {
         name: {get: function () {
             return name;
         }},
+
+        onReset: {set: function (x) {
+            onReset = x;
+        }}
     });
 });

@@ -9,12 +9,14 @@ define(function () { // TODO: ["board"], function (board) {
 
     return function (spec) {
         var score = 0;
-        var onScoreIncreased = function () {};
+        var onIncreaseScore = function () {};
+        var isRequestingReset = false;
+        var onAskForReset = function () {};
 
         return Object.create(null, {
             increaseScore: {value: function () {
                 score += 1;
-                onScoreIncreased();
+                onIncreaseScore();
             }},
             color: {get: function () {
                 return spec.color;
@@ -25,11 +27,22 @@ define(function () { // TODO: ["board"], function (board) {
             number: {get: function () {
                 return spec.number;
             }},
-            onScoreIncreased: {set: function (x) {
-                onScoreIncreased = x;
+            onIncreaseScore: {set: function (x) {
+                onIncreaseScore = x;
             }},
             score: {get: function () {
                 return score;
+            }},
+            isRequestingReset: {get: function () {
+                return isRequestingReset;
+            }, set: function (x) {
+                isRequestingReset = x;
+            }},
+            onAskForReset: {set: function (x) {
+                onAskForReset = x;
+            }},
+            askForReset: {value: function () {
+                onAskForReset();
             }}
         });
     };

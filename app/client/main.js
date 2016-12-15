@@ -5,8 +5,8 @@
 /*global define, window */
 
 define([
-    "display", "util", "players", "toolbar_constructor", "vendor/rAF"
-], function (display, util, players, toolbarConstructor) {
+    "display", "util", "players", "toolbar_constructor", "board", "vendor/rAF"
+], function (display, util, players, toolbarConstructor, board) {
     "use strict";
 
     var animStep;
@@ -40,8 +40,14 @@ define([
         // <http://stackoverflow.com/a/13720649>
     };
 
-    toolbarConstructor(players[0]);
-    toolbarConstructor(players[1]);
+    var toolbars = [];
+    toolbars.push(toolbarConstructor(players[0]));
+    toolbars.push(toolbarConstructor(players[1]));
+    board.onReset = function () {
+        toolbars.forEach(function (toolbar) {
+            toolbar.onReset();
+        });
+    };
 
     var onDocumentComplete = function () {
         adjustFontSize();
