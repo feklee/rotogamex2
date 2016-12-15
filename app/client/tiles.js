@@ -253,7 +253,7 @@ define(["players"], function (players) {
         markAllAsFixed: {value: markAllAsFixed}
     });
 
-    initWithRandom();
+    initWithChess();
 
     return tiles;
 });
