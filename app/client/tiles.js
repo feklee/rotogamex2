@@ -143,97 +143,39 @@ define(["players"], function (players) {
                 imgData[offs + 2] + ")");
     };
 
-    var createColumnFromCtx = function (xT, rawDataColumn) {
-        var tilesColumn = [];
-        var offs;
+    var initColumnWithChessPattern = function (column, xT) {
         var yT = 0;
         while (yT < sideLenT) {
-            offs = 4 * (yT * sideLenT + xT);
-            tilesColumn.push({
+            var shift = (xT + 1) % 2;
+            var shiftedYT = yT + shift;
+            var playerNumber = shiftedYT > 3 ? 0 : 1;
+            var color = shiftedYT % 2 ? players[playerNumber].color : "black";
+
+            column.push({
                 posT: [xT, yT],
-                color: rawDataColumn[yT].color,
+                color: color,
                 wasFixed: false,
                 isFixed: false
             });
             yT += 1;
         }
-        return tilesColumn;
     };
 
-    var init = function () {
-        var rawData = [
-                [{"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"}],
-                [{"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"}],
-                [{"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"}],
-                [{"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"}],
-                [{"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"}],
-                [{"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"}],
-                [{"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"}],
-                [{"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(0,127,255)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"},
-                 {"color":"rgb(0,0,0)"},
-                 {"color":"rgb(255,127,0)"}]];
+    var initWithChessPattern = function () {
         var xT = 0;
 
         tiles.length = 0;
         while (xT < sideLenT) {
-            tiles.push(createColumnFromCtx(xT, rawData[xT]));
+            var column = [];
+            initColumnWithChessPattern(column, xT);
+            tiles.push(column);
             xT += 1;
         }
 
+        markFixedTiles();
+    };
+
+    var initWithRandomPattern = function () {
         markFixedTiles();
     };
 
@@ -266,12 +208,12 @@ define(["players"], function (players) {
 
     var tiles = Object.create([], {
         rotate: {value: rotate},
-        reset: {value: init},
+        reset: {value: initWithChessPattern},
         allAreFixed: {value: allAreFixed},
         markAllAsFixed: {value: markAllAsFixed}
     });
 
-    init();
+    initWithChessPattern();
 
     return tiles;
 });
