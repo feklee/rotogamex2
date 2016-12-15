@@ -143,6 +143,15 @@ define(["players"], function (players) {
                 imgData[offs + 2] + ")");
     };
 
+    var newTile = function (xT, yT, color) {
+        return {
+            posT: [xT, yT],
+            color: color,
+            wasFixed: false,
+            isFixed: false
+        };
+    };
+
     var initColumnWithChess = function (column, xT) {
         var yT = 0;
         while (yT < sideLenT) {
@@ -151,12 +160,7 @@ define(["players"], function (players) {
             var playerNumber = shiftedYT > 3 ? 0 : 1;
             var color = shiftedYT % 2 ? players[playerNumber].color : "black";
 
-            column.push({
-                posT: [xT, yT],
-                color: color,
-                wasFixed: false,
-                isFixed: false
-            });
+            column.push(newTile(xT, yT, color));
             yT += 1;
         }
     };
@@ -171,11 +175,46 @@ define(["players"], function (players) {
             tiles.push(column);
             xT += 1;
         }
+    };
 
-        markFixedTiles();
+    var clear = function () {
+        tiles.length = 0;
+        var xT = 0;
+        while (xT < sideLenT) {
+            tiles.push([]);
+            xT += 1;
+        }
+    };
+
+    var randomCoordinate = function () {
+        return Math.floor(Math.random() * sideLenT);
+    };
+
+    var randomlyDistribute = function (color, quantity) {
+        if (quantity === 0) {
+            return;
+        }
+
+        var xT;
+        var yT;
+        do {
+            xT = randomCoordinate();
+            yT = randomCoordinate();
+        } while (tiles[xT][yT] !== undefined);
+
+        tiles[xT][yT] = newTile(xT, yT, color);
+
+        randomlyDistribute(color, quantity - 1);
     };
 
     var initWithRandom = function () {
+        var xT = 0;
+
+        clear();
+        randomlyDistribute(players[0].color, 16);
+        randomlyDistribute(players[1].color, 16);
+        randomlyDistribute("black", 32);
+
         markFixedTiles();
     };
 
@@ -209,11 +248,12 @@ define(["players"], function (players) {
     var tiles = Object.create([], {
         rotate: {value: rotate},
         resetToChess: {value: initWithChess},
+        resetToRandom: {value: initWithRandom},
         allAreFixed: {value: allAreFixed},
         markAllAsFixed: {value: markAllAsFixed}
     });
 
-    initWithChess();
+    initWithRandom();
 
     return tiles;
 });

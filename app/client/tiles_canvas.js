@@ -17,9 +17,9 @@ define([
     var needsToBeRendered = true;
     var selectedRectT; // when dragged: currently selected rectangle
     var draggedToTheRight; // when dragged: current drag direction
-    var animIsRunning;
+    var lastAnimIsRunning;
     var rotation;
-    var initRotAnimHasToBeTriggered = true;
+    var initialRotAnimHasToBeTriggered = true;
     var el = document.querySelector("canvas.tiles");
     var processedNumberOfRotation = 0;
 
@@ -34,9 +34,9 @@ define([
         }
     };
 
-    var animIsRunningNeedsUpdate = function () {
-        return (animIsRunning === undefined ||
-                animIsRunning !== rotAnimCanvas.animIsRunning);
+    var rotAnimStartedOrStopped = function () {
+        return (lastAnimIsRunning === undefined ||
+                lastAnimIsRunning !== rotAnimCanvas.animIsRunning);
     };
 
     var onRubberBandDrag = function (newSelectedRectT, newDraggedToTheRight) {
@@ -212,12 +212,12 @@ define([
 
     // Triggers a rotation animation that is shown when the canvas is first
     // displayed. This rotation serves as a hint concerning how the game works.
-    var triggerInitRotAnim = function () {
-        var initRotation = rotationFactory.create(
+    var triggerInitialRotAnim = function () { // TODO: doesn't show
+        var initialRotation = rotationFactory.create(
             rectTFactory.create([0, 0], [tiles.widthT - 1, tiles.heightT - 1]),
             true
         );
-        rotAnimCanvas.startAnim(initRotation);
+        rotAnimCanvas.startAnim(initialRotation);
     };
 
     var tilesCanvas = displayCanvasFactory.create();
@@ -230,7 +230,7 @@ define([
     };
 
     var lastRotationHasBeenProcessed = function () {
-        return processedNumberOfRotation !== board.numberOfRotation;
+        return processedNumberOfRotation === board.numberOfRotation;
     };
 
     rubberBandCanvas.onDrag = onRubberBandDrag;
@@ -258,26 +258,30 @@ define([
             obtainSideLen();
             updateRubberBandCanvasVisibility();
 
-            if (lastRotationHasBeenProcessed()) {
+            if (!lastRotationHasBeenProcessed()) {
                 startRotationAnim();
                 needsToBeRendered = true;
                 processedNumberOfRotation = board.numberOfRotation;
             }
 
-            if (initRotAnimHasToBeTriggered) {
-                triggerInitRotAnim();
-                initRotAnimHasToBeTriggered = false;
+            if (initialRotAnimHasToBeTriggered) {
+                triggerInitialRotAnim();
+                initialRotAnimHasToBeTriggered = false;
             }
 
-            if (animIsRunningNeedsUpdate()) {
+            if (rotAnimStartedOrStopped()) {
                 needsToBeRendered = true;
-                animIsRunning = rotAnimCanvas.animIsRunning;
+                lastAnimIsRunning = rotAnimCanvas.animIsRunning;
             }
 
             if (needsToBeRendered) {
                 render();
                 needsToBeRendered = false;
             }
+        }},
+
+        requestRender: {value: function () {
+            needsToBeRendered = true;
         }}
     });
 });

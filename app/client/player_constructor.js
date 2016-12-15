@@ -11,7 +11,9 @@ define(function () { // TODO: ["board"], function (board) {
         var score = 0;
         var onIncreaseScore = function () {};
         var isRequestingResetToChess = false;
+        var isRequestingResetToRandom = false;
         var onAskForResetToChess = function () {};
+        var onAskForResetToRandom = function () {};
 
         return Object.create(null, {
             increaseScore: {value: function () {
@@ -38,11 +40,22 @@ define(function () { // TODO: ["board"], function (board) {
             }, set: function (x) {
                 isRequestingResetToChess = x;
             }},
+            isRequestingResetToRandom: {get: function () {
+                return isRequestingResetToRandom;
+            }, set: function (x) {
+                isRequestingResetToRandom = x;
+            }},
             onAskForResetToChess: {set: function (x) {
                 onAskForResetToChess = x;
             }},
+            onAskForResetToRandom: {set: function (x) {
+                onAskForResetToRandom = x;
+            }},
             askForResetToChess: {value: function () {
                 onAskForResetToChess();
+            }},
+            askForResetToRandom: {value: function () {
+                onAskForResetToRandom();
             }}
         });
     };

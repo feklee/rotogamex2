@@ -5,8 +5,9 @@
 /*global define, window */
 
 define([
-    "display", "util", "players", "toolbar_constructor", "board", "vendor/rAF"
-], function (display, util, players, toolbarConstructor, board) {
+    "display", "util", "players", "toolbar_constructor", "board",
+    "tiles_canvas", "vendor/rAF"
+], function (display, util, players, toolbarConstructor, board, tilesCanvas) {
     "use strict";
 
     var animStep;
@@ -47,6 +48,13 @@ define([
         toolbars.forEach(function (toolbar) {
             toolbar.onResetToChess();
         });
+        tilesCanvas.requestRender();
+    };
+    board.onResetToRandom = function () {
+        toolbars.forEach(function (toolbar) {
+            toolbar.onResetToRandom();
+        });
+        tilesCanvas.requestRender();
     };
 
     var onDocumentComplete = function () {
