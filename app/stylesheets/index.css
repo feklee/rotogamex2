@@ -109,7 +109,7 @@ button:disabled {
     transform: scale(-1, -1);
 }
 
-.toolbar .active, .toolbar .reset {
+.toolbar .activity-indicator, .toolbar .reset {
     width: 20%;
 }
 

@@ -56,6 +56,7 @@ define([
         });
         tilesCanvas.requestRender();
     };
+    players[0].makeActive();
 
     var onDocumentComplete = function () {
         adjustFontSize();

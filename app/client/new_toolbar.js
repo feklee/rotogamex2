@@ -13,6 +13,10 @@ define(["board", "players"], function (board, players) {
         return toolbarEl.querySelector(".reset button.to-random");
     };
 
+    var activityIndicatorEl = function (toolbarEl) {
+        return toolbarEl.querySelector(".activity-indicator");
+    };
+
     var onResetToChessClick = function (player) {
         var otherPlayer = players[1 - player.number];
         player.isRequestingResetToChess = true;
@@ -47,6 +51,14 @@ define(["board", "players"], function (board, players) {
         resetToRandomButtonEl(toolbarEl).addEventListener("click", function () {
             onResetToRandomClick(player);
         });
+    };
+
+    var onActivityChanged = function (toolbarEl, player) {
+        if (player.isActive) {
+            activityIndicatorEl(toolbarEl).classList.add("highlighted");
+        } else {
+            activityIndicatorEl(toolbarEl).classList.remove("highlighted");
+        }
     };
 
     var renderScore = function (toolbarEl, player) {
@@ -87,14 +99,9 @@ define(["board", "players"], function (board, players) {
         player.onAskForResetToRandom = function () {
             onAskForResetToRandom(toolbarEl);
         };
-        board.onResetToChess = function () {
-            board.onResetToChess();
-            onResetToChess(toolbarEl);
-        };
-        board.onResetToRandom = function () {
-            board.onResetToRandom();
-            onResetToRandom(toolbarEl);
-        };
+        player.onActivityChanged = function () {
+            onActivityChanged(toolbarEl, player);
+        }
 
         return Object.create(null, {
             onResetToChess: {value: function () {

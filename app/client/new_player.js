@@ -14,6 +14,8 @@ define(function () { // TODO: ["board"], function (board) {
         var isRequestingResetToRandom = false;
         var onAskForResetToChess = function () {};
         var onAskForResetToRandom = function () {};
+        var onActivityChanged = function () {};
+        var isActive = false;
 
         return Object.create(null, {
             increaseScore: {value: function () {
@@ -44,6 +46,16 @@ define(function () { // TODO: ["board"], function (board) {
                 return isRequestingResetToRandom;
             }, set: function (x) {
                 isRequestingResetToRandom = x;
+            }},
+            makeActive: {value: function () {
+                isActive = true;
+                onActivityChanged();
+            }},
+            isActive: {get: function () {
+                return isActive;
+            }},
+            onActivityChanged: {set: function (x) {
+                onActivityChanged = x;
             }},
             onAskForResetToChess: {set: function (x) {
                 onAskForResetToChess = x;
