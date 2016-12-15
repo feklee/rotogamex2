@@ -8,7 +8,7 @@ if (typeof define !== "function") {
     var define = require("amdefine")(module);
 }
 
-define(function () {
+define(["players"], function (players) {
     "use strict";
 
     var sideLenT = 8;
@@ -75,36 +75,41 @@ define(function () {
         }
     };
 
-    var tileSticksToBorder = function (xT, yT, color, direction) {
-        var tileIsOutsideBoard = yT >= sideLenT || yT < 0;
-
-        if (tileIsOutsideBoard) {
+    var tileSticksToBorderOfPlayer = function (tile, player) {
+        if (tile.isFixed) {
             return true;
         }
 
-        if (tiles[xT][yT].isFixed) {
+        if (tile.color !== player.color) {
+            return false;
+        }
+
+        var xT = tile.posT[0];
+        var yT = tile.posT[1];
+        var nextYT = yT + player.direction;
+
+        if (nextYT >= sideLenT || nextYT < 0) {
             return true;
         }
 
-        return (tiles[xT][yT].color === color) &&
-            tileSticksToBorder(xT, yT + direction, color, direction);
+        return tileSticksToBorderOfPlayer(tiles[xT][nextYT], player);
     };
 
-    var tileIsFixed = function (xT, yT) {
-        return tileSticksToBorder(xT, yT, "rgb(255,127,0)", -1) ||
-            tileSticksToBorder(xT, yT, "rgb(0,127,255)", 1);
+    var tileSticksToBorder = function (tile) {
+        return tileSticksToBorderOfPlayer(tile, players[0]) ||
+            tileSticksToBorderOfPlayer(tile, players[1]);
     };
 
-    var markFixedTilesInColumn = function (column, xT) {
-        column.forEach(function (tile, yT) {
+    var markFixedTilesInColumn = function (column) {
+        column.forEach(function (tile) {
             tile.wasFixed = tile.isFixed;
-            tile.isFixed = tileIsFixed(xT, yT);
+            tile.isFixed = tileSticksToBorder(tile);
         });
     };
 
     var markFixedTiles = function () {
-        tiles.forEach(function (column, xT) {
-            markFixedTilesInColumn(column, xT);
+        tiles.forEach(function (column) {
+            markFixedTilesInColumn(column);
         });
     };
 
@@ -232,9 +237,38 @@ define(function () {
         markFixedTiles();
     };
 
+    var allInColumnAreFixed = function (column, player) {
+        return column.every(function (tile) {
+            if (tile.color !== player.color) {
+                return true;
+            }
+            return tile.isFixed;
+        });
+    };
+
+    var allAreFixed = function (player) {
+        return tiles.every(function (column) {
+            return allInColumnAreFixed(column, player);
+        });
+    };
+
+    var markAllInColumnAsFixed = function (column) {
+        column.forEach(function (tile) {
+            tile.isFixed = true;
+        });
+    };
+
+    var markAllAsFixed = function () {
+        tiles.forEach(function (column) {
+            markAllInColumnAsFixed(column);
+        });
+    };
+
     var tiles = Object.create([], {
         rotate: {value: rotate},
-        reset: {value: init}
+        reset: {value: init},
+        allAreFixed: {value: allAreFixed},
+        markAllAsFixed: {value: markAllAsFixed}
     });
 
     init();

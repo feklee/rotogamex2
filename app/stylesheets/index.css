@@ -117,13 +117,8 @@ button:disabled {
     padding: 1%;
 }
 
-.player-1.toolbar {
-    background: rgb(255,127,0);
+.player-0.toolbar {
     transform: scale(-1, -1);
-}
-
-.player-2.toolbar {
-    background: rgb(0,127,255);
 }
 
 .toolbar .active, .toolbar .reset {

@@ -5,11 +5,9 @@
 /*global define, window */
 
 define([
-    "display", "util", "toolbar_initializer", "vendor/rAF"
-], function (display, util, toolbarInitializer) {
+    "display", "util", "players", "toolbar_constructor", "vendor/rAF"
+], function (display, util, players, toolbarConstructor) {
     "use strict";
-
-    var loaded = false;
 
     var animStep;
     animStep = function () {
@@ -42,12 +40,10 @@ define([
         // <http://stackoverflow.com/a/13720649>
     };
 
+    toolbarConstructor(players[0]);
+    toolbarConstructor(players[1]);
+
     var onDocumentComplete = function () {
-        loaded = true;
-
-        toolbarInitializer(1);
-        toolbarInitializer(2);
-
         adjustFontSize();
 
         hideLoadScreen();

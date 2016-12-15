@@ -7,9 +7,10 @@
 define([
     "tiles", "board", "rubber_band_canvas", "rot_anim_canvas", "arrow_canvas",
     "display_c_sys", "display_canvas_factory", "rotation_factory",
-    "rect_t_factory"
+    "rect_t_factory", "players"
 ], function (tiles, board, rubberBandCanvas, rotAnimCanvas, arrowCanvas,
-        displayCSys, displayCanvasFactory, rotationFactory, rectTFactory) {
+        displayCSys, displayCanvasFactory, rotationFactory, rectTFactory,
+        players) {
     "use strict";
 
     var sideLen;
@@ -113,24 +114,27 @@ define([
         return rotAnimCanvas.animIsRunning && rotAnimCanvas.isInRotRect(posT);
     };
 
+    // gaps may still occur, possibly due to a bug:
+    // <http://stackoverflow.com/questions/41163227/cannot-draw-on-part-of-
+    // canvas/41164642#41164642>
     var roundBordersBetweenFixedTiles = function (tile, extents) {
         var key = rotAnimCanvas.animIsRunning ? "wasFixed" : "isFixed";
         var xT = tile.posT[0];
         var yT = tile.posT[1];
 
-        if (yT > 0 && tiles[xT][yT - 1][key]) {
+        if (yT === 0 || tiles[xT][yT - 1][key]) {
             extents.top = Math.round(extents.top);
         }
 
-        if (xT > 0 && tiles[xT - 1][yT][key]) {
+        if (xT === 0 || tiles[xT - 1][yT][key]) {
             extents.left = Math.round(extents.left);
         }
 
-        if (yT + 1 < board.sideLenT && tiles[xT][yT + 1][key]) {
+        if (yT + 1 === board.sideLenT || tiles[xT][yT + 1][key]) {
             extents.bottom = Math.round(extents.bottom);
         }
 
-        if (xT + 1 < board.sideLenT && tiles[xT + 1][yT][key]) {
+        if (xT + 1 === board.sideLenT || tiles[xT + 1][yT][key]) {
             extents.right = Math.round(extents.right);
         }
     };
@@ -183,8 +187,8 @@ define([
         var renderAsFinished = board.isFinished &&
                 !rotAnimCanvas.animIsRunning;
 
-        el.height = sideLen;
-        el.width = el.height;
+        el.height = el.clientWidth;
+        el.width = el.clientHeight;
 
         if (renderAsFinished) {
             displayCSys.disableSpacing();
@@ -234,10 +238,25 @@ define([
 
     needsToBeRendered = true;
 
+    rotAnimCanvas.onAnimFinished = function () {
+        var gameIsFinished = false;
+
+        players.forEach(function (player) {
+            if (tiles.allAreFixed(player)) {
+                player.increaseScore();
+                gameIsFinished = true;
+            }
+        });
+
+        if (gameIsFinished) {
+            tiles.markAllAsFixed();
+        }
+    };
+
     return Object.create(tilesCanvas, {
         animStep: {value: function () {
             obtainSideLen();
-            updateRubberBandCanvasVisibility(); // TODO: move to rubberbandcanvas?
+            updateRubberBandCanvasVisibility();
 
             if (lastRotationHasBeenProcessed()) {
                 startRotationAnim();

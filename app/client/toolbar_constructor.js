@@ -19,19 +19,21 @@ define(["board"], function (board) {
         el.innerHTML = score;
     };
 
-    return function (playerNumber) {
-        var score = 0;
-        var toolbarEl = document.querySelector(".player-" + playerNumber +
+    var setUpToolbar = function (toolbarEl, backgroundColor) {
+        setUpResetButton(toolbarEl);
+        toolbarEl.style.background = backgroundColor;
+    };
+
+    return function (player) {
+        var toolbarEl = document.querySelector(".player-" + player.number +
                                                ".toolbar");
 
-        setUpResetButton(toolbarEl);
-        renderScore(toolbarEl, score);
+        setUpToolbar(toolbarEl, player.color);
+        renderScore(toolbarEl, player.score);
+        player.onScoreIncreased = function () {
+            renderScore(toolbarEl, player.score);
+        };
 
-        return Object.create(null, {
-            increaseScore: {value: function () {
-                score += 1;
-                renderScore(toolbarEl, score);
-            }}
-        });
+        return Object.create(null);
     };
 });

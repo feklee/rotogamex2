@@ -27,13 +27,13 @@ html(lang="en", manifest="manifest.appcache")
          content="initial-scale=1, maximum-scale=1, user-scalable=0")
     meta(name="apple-mobile-web-app-capable", content="yes")
     meta(name="apple-mobile-web-app-status-bar-style", content="black")
-    link(rel="apple-touch-icon-precomposed", href="/images/icon_256.png")
+    link(rel="apple-touch-icon-precomposed", href="/images/icon-256.png")
 
     include google_analytics.html
 
   body
     #game
-      .player-1.toolbar
+      .player-0.toolbar
         .active
         .score
         .reset
@@ -45,7 +45,7 @@ html(lang="en", manifest="manifest.appcache")
         canvas(class="rot-anim")
         canvas(class="rubber-band")
 
-      .player-2.toolbar
+      .player-1.toolbar
         .active
         .score
         .reset
