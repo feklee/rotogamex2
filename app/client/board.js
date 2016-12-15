@@ -11,7 +11,7 @@ define(["tiles"], function (tiles) {
     var lastRotation = null;
     var numberOfRotation = 0;
     var sideLenT = tiles.length;
-    var onReset = function () {};
+    var onResetToChess = function () {};
 
     // Updates `isFinished`.
     var updateIsFinished = function () {
@@ -40,12 +40,12 @@ define(["tiles"], function (tiles) {
             return sideLenT;
         }},
 
-        reset: {value: function () {
-            tiles.reset();
+        resetToChess: {value: function () {
+            tiles.resetToChess();
             lastRotation = null;
             isFinished = false;
             numberOfRotation = 0;
-            onReset();
+            onResetToChess();
         }},
 
         isFinished: {get: function () {
@@ -60,8 +60,8 @@ define(["tiles"], function (tiles) {
             return name;
         }},
 
-        onReset: {set: function (x) {
-            onReset = x;
+        onResetToChess: {set: function (x) {
+            onResetToChess = x;
         }}
     });
 });

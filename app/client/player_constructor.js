@@ -10,8 +10,8 @@ define(function () { // TODO: ["board"], function (board) {
     return function (spec) {
         var score = 0;
         var onIncreaseScore = function () {};
-        var isRequestingReset = false;
-        var onAskForReset = function () {};
+        var isRequestingResetToChess = false;
+        var onAskForResetToChess = function () {};
 
         return Object.create(null, {
             increaseScore: {value: function () {
@@ -33,16 +33,16 @@ define(function () { // TODO: ["board"], function (board) {
             score: {get: function () {
                 return score;
             }},
-            isRequestingReset: {get: function () {
-                return isRequestingReset;
+            isRequestingResetToChess: {get: function () {
+                return isRequestingResetToChess;
             }, set: function (x) {
-                isRequestingReset = x;
+                isRequestingResetToChess = x;
             }},
-            onAskForReset: {set: function (x) {
-                onAskForReset = x;
+            onAskForResetToChess: {set: function (x) {
+                onAskForResetToChess = x;
             }},
-            askForReset: {value: function () {
-                onAskForReset();
+            askForResetToChess: {value: function () {
+                onAskForResetToChess();
             }}
         });
     };

@@ -43,9 +43,9 @@ define([
     var toolbars = [];
     toolbars.push(toolbarConstructor(players[0]));
     toolbars.push(toolbarConstructor(players[1]));
-    board.onReset = function () {
+    board.onResetToChess = function () {
         toolbars.forEach(function (toolbar) {
-            toolbar.onReset();
+            toolbar.onResetToChess();
         });
     };
 

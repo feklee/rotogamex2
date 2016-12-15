@@ -143,7 +143,7 @@ define(["players"], function (players) {
                 imgData[offs + 2] + ")");
     };
 
-    var initColumnWithChessPattern = function (column, xT) {
+    var initColumnWithChess = function (column, xT) {
         var yT = 0;
         while (yT < sideLenT) {
             var shift = (xT + 1) % 2;
@@ -161,13 +161,13 @@ define(["players"], function (players) {
         }
     };
 
-    var initWithChessPattern = function () {
+    var initWithChess = function () {
         var xT = 0;
 
         tiles.length = 0;
         while (xT < sideLenT) {
             var column = [];
-            initColumnWithChessPattern(column, xT);
+            initColumnWithChess(column, xT);
             tiles.push(column);
             xT += 1;
         }
@@ -175,7 +175,7 @@ define(["players"], function (players) {
         markFixedTiles();
     };
 
-    var initWithRandomPattern = function () {
+    var initWithRandom = function () {
         markFixedTiles();
     };
 
@@ -208,12 +208,12 @@ define(["players"], function (players) {
 
     var tiles = Object.create([], {
         rotate: {value: rotate},
-        reset: {value: initWithChessPattern},
+        resetToChess: {value: initWithChess},
         allAreFixed: {value: allAreFixed},
         markAllAsFixed: {value: markAllAsFixed}
     });
 
-    initWithChessPattern();
+    initWithChess();
 
     return tiles;
 });
