@@ -5,9 +5,9 @@
 /*global define, window */
 
 define([
-    "display", "util", "players", "toolbar_constructor", "board",
+    "display", "util", "players", "new_toolbar", "board",
     "tiles_canvas", "vendor/rAF"
-], function (display, util, players, toolbarConstructor, board, tilesCanvas) {
+], function (display, util, players, newToolbar, board, tilesCanvas) {
     "use strict";
 
     var animStep;
@@ -42,8 +42,8 @@ define([
     };
 
     var toolbars = [];
-    toolbars.push(toolbarConstructor(players[0]));
-    toolbars.push(toolbarConstructor(players[1]));
+    toolbars.push(newToolbar(players[0]));
+    toolbars.push(newToolbar(players[1]));
     board.onResetToChess = function () {
         toolbars.forEach(function (toolbar) {
             toolbar.onResetToChess();

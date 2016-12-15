@@ -2,17 +2,17 @@
 
 /*global define */
 
-define(["player_constructor"], function (playerConstructor) {
+define(["new_player"], function (newPlayer) {
     "use strict";
 
     var players = [];
 
-    players.push(playerConstructor({
+    players.push(newPlayer({
         number: 0,
         color: "rgb(255,127,0)"
     }));
 
-    players.push(playerConstructor({
+    players.push(newPlayer({
         number: 1,
         color: "rgb(0,127,255)"
     }));
