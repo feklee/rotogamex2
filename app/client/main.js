@@ -68,8 +68,6 @@ define([
                     // continues with animation
     };
 
-    util.immediatelyRefreshAppCache();
-
     util.onceDocumentIsInteractive(function () {
         preventPageDrag();
         util.onceDocumentIsComplete(onDocumentComplete);
