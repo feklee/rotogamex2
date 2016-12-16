@@ -9,12 +9,12 @@ define(["new_player"], function (newPlayer) {
 
     players.push(newPlayer({
         number: 0,
-        color: "rgb(0,127,255)"
+        color: "rgb(255,127,0)"
     }));
 
     players.push(newPlayer({
         number: 1,
-        color: "rgb(255,127,0)"
+        color: "rgb(0,127,255)"
     }));
 
     return players;

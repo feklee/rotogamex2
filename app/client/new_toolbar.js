@@ -27,6 +27,8 @@ define(["board", "players"], function (board, players) {
         } else {
             otherPlayer.askForResetToChess();
         }
+        player.isRequestingResetToRandom = false;
+        otherPlayer.isRequestingResetToRandom = false;
     };
 
     var onResetToRandomClick = function (player) {
@@ -39,6 +41,8 @@ define(["board", "players"], function (board, players) {
         } else {
             otherPlayer.askForResetToRandom();
         }
+        player.isRequestingResetToChess = false;
+        otherPlayer.isRequestingResetToChess = false;
     };
 
     var setUpResetToChessButton = function (toolbarEl, player) {
@@ -74,11 +78,8 @@ define(["board", "players"], function (board, players) {
         resetToRandomButtonEl(toolbarEl).classList.add("highlighted");
     };
 
-    var onResetToChess = function (toolbarEl) {
+    var onReset = function (toolbarEl) {
         resetToChessButtonEl(toolbarEl).classList.remove("highlighted");
-    };
-
-    var onResetToRandom = function (toolbarEl) {
         resetToRandomButtonEl(toolbarEl).classList.remove("highlighted");
     };
 
@@ -104,11 +105,8 @@ define(["board", "players"], function (board, players) {
         }
 
         return Object.create(null, {
-            onResetToChess: {value: function () {
-                onResetToChess(toolbarEl);
-            }},
-            onResetToRandom: {value: function () {
-                onResetToRandom(toolbarEl);
+            onReset: {value: function () {
+                onReset(toolbarEl);
             }}
         });
     };

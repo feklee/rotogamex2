@@ -46,17 +46,16 @@ define([
     toolbars.push(newToolbar(players[1]));
     board.onResetToChess = function () {
         toolbars.forEach(function (toolbar) {
-            toolbar.onResetToChess();
+            toolbar.onReset();
         });
         tilesCanvas.requestRender();
     };
     board.onResetToRandom = function () {
         toolbars.forEach(function (toolbar) {
-            toolbar.onResetToRandom();
+            toolbar.onReset(); // TODO: still does not work if several highlights active / one click should deactivate the other anyhow / also allow disabling
         });
         tilesCanvas.requestRender();
     };
-    players[0].makeActive();
 
     var onDocumentComplete = function () {
         adjustFontSize();
