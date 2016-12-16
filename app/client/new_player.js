@@ -5,8 +5,6 @@
 define(function () { // TODO: ["board"], function (board) {
     "use strict";
 
-    var directions = [-1, 1];
-
     return function (spec) {
         var score = 0;
         var onIncreaseScore = function () {};
@@ -26,7 +24,7 @@ define(function () { // TODO: ["board"], function (board) {
                 return spec.color;
             }},
             direction: {get: function () {
-                return directions[spec.number];
+                return spec.direction;
             }},
             number: {get: function () {
                 return spec.number;
@@ -37,6 +35,7 @@ define(function () { // TODO: ["board"], function (board) {
             score: {get: function () {
                 return score;
             }},
+// TODO            isRequestingReset + type?
             isRequestingResetToChess: {get: function () {
                 return isRequestingResetToChess;
             }, set: function (x) {
