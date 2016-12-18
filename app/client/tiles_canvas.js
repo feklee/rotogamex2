@@ -22,6 +22,7 @@ define([
     var initialRotAnimHasToBeTriggered = true;
     var el = document.querySelector("canvas.tiles");
     var processedNumberOfRotation = 0;
+    var initialRotAnimHasFinished;
 
     var updateRotation = function () {
         if (selectedRectT === undefined) {
@@ -184,23 +185,13 @@ define([
 
     var render = function () {
         var ctx = el.getContext("2d");
-        var renderAsFinished = board.isFinished &&
-                !rotAnimCanvas.animIsRunning;
 
         el.height = el.clientWidth;
         el.width = el.clientHeight;
 
-        if (renderAsFinished) {
-            displayCSys.disableSpacing();
-        }
-
         tiles.forEach(function (column) {
             renderColumn(ctx, column);
         });
-
-        if (renderAsFinished) {
-            displayCSys.enableSpacing();
-        }
     };
 
     var startRotationAnim = function () {
@@ -239,20 +230,22 @@ define([
     needsToBeRendered = true;
 
     rotAnimCanvas.onAnimFinished = function () {
-        var gameIsFinished = false;
-
         players.forEach(function (player) {
             if (tiles.allAreFixed(player)) {
                 player.increaseScore();
-                gameIsFinished = true;
+                board.isFinished = true;
             }
         });
 
-        if (gameIsFinished) {
+        if (board.isFinished) {
             tiles.markAllAsFixed();
         }
 
-        players.activateOther();
+        if (initialRotAnimHasFinished) {
+            players.activateOther();
+        } else {
+            initialRotAnimHasFinished = true;
+        }
     };
 
     return Object.create(tilesCanvas, {
@@ -269,6 +262,7 @@ define([
             if (initialRotAnimHasToBeTriggered) {
                 triggerInitialRotAnim();
                 initialRotAnimHasToBeTriggered = false;
+                initialRotAnimHasFinished = false;
             }
 
             if (rotAnimStartedOrStopped()) {
@@ -284,6 +278,10 @@ define([
 
         requestRender: {value: function () {
             needsToBeRendered = true;
+        }},
+
+        gameIsFinished: {get: function () {
+            return gameIsFinished;
         }}
     });
 });

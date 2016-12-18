@@ -41,13 +41,25 @@ define([
         // <http://stackoverflow.com/a/13720649>
     };
 
+    var onActivePlayerChange = function () {
+        toolbars.forEach(function (toolbar) {
+            toolbar.clearReset();
+            toolbar.updateActivityIndicator();
+        });
+    };
+
     var toolbars = [];
     toolbars.push(newToolbar(players[0]));
     toolbars.push(newToolbar(players[1]));
     toolbars[0].otherToolbar = toolbars[1];
     toolbars[1].otherToolbar = toolbars[0];
+    players.onActivePlayerChange = onActivePlayerChange;
+
     board.onReset = function () {
         tilesCanvas.requestRender();
+        toolbars.forEach(function (toolbar) {
+            toolbar.updateActivityIndicator()
+        });
     };
 
     var onDocumentComplete = function () {

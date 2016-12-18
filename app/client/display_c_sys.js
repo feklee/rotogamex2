@@ -100,16 +100,6 @@ define(["board"], function (board) {
 
         tileSideLen: {get: function () {
             return tileSideLen;
-        }},
-
-        disableSpacing: {value: function () {
-            spacingIsDisabled = true;
-            updateDimensions();
-        }},
-
-        enableSpacing: {value: function () {
-            spacingIsDisabled = false;
-            updateDimensions();
         }}
     });
 });

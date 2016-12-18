@@ -37,7 +37,6 @@ define(["board", "players"], function (board, players) {
         }
 
         if (internal.selectedResetType === type) {
-            console.log("fixme 2: already selected");
             clearReset(internal);
             internal.otherToolbar.clearReset();
             return;
@@ -63,11 +62,12 @@ define(["board", "players"], function (board, players) {
         );
     };
 
-    var onActivityChanged = function (internal) {
-        if (internal.player.isActive) {
-            activityIndicatorEl(internal).classList.add("highlighted");
-        } else {
+    var updateActivityIndicator = function (internal) {
+        console.log(board.isFinished);
+        if (board.isFinished || internal.player !== players.active) {
             activityIndicatorEl(internal).classList.remove("highlighted");
+        } else {
+            activityIndicatorEl(internal).classList.add("highlighted");
         }
     };
 
@@ -90,12 +90,7 @@ define(["board", "players"], function (board, players) {
         internal.player.onIncreaseScore = function () {
             renderScore(internal);
         };
-        players.onActivePlayerChange = function () {
-            console.log("active change");
-            clearReset(internal);
-            internal.otherToolbar.clearReset();
-            onActivityChanged(internal);
-        }
+        updateActivityIndicator(internal);
 
         return Object.create(null, {
             otherToolbar: {set: function (x) {
@@ -109,6 +104,9 @@ define(["board", "players"], function (board, players) {
             }},
             highlightResetButton: {value: function (type) {
                 highlightResetButton(internal, type);
+            }},
+            updateActivityIndicator: {value: function () {
+                updateActivityIndicator(internal);
             }}
         });
     };

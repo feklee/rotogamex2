@@ -24,7 +24,7 @@ define(["new_player"], function (newPlayer) {
 
     Object.defineProperties(players, {
         activateOther: {value: function () {
-            activePlayer === players[0] ? players[1] : players[0];
+            activePlayer = players[1 - activePlayer.number];
             onActivePlayerChange();
         }},
 
@@ -34,7 +34,7 @@ define(["new_player"], function (newPlayer) {
 
         onActivePlayerChange: {set: function (x) {
             onActivePlayerChange = x;
-        }}
+        }},
     });
 
     return players;

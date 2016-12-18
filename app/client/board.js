@@ -7,11 +7,11 @@
 define(["tiles"], function (tiles) {
     "use strict";
 
-    var isFinished = false; // true when a game is finished
     var lastRotation = null;
     var numberOfRotation = 0;
     var sideLenT = tiles.length;
     var onReset = function () {};
+    var isFinished = false;
 
     return Object.create(null, {
         rotate: {value: function (rotation) {
@@ -36,10 +36,13 @@ define(["tiles"], function (tiles) {
             tiles.resetTo(type);
             lastRotation = null;
             numberOfRotation = 0;
+            isFinished = false;
             onReset();
         }},
 
-        isFinished: {get: function () {
+        isFinished: {set: function (x) {
+            isFinished = x;
+        }, get: function () {
             return isFinished;
         }},
 
