@@ -9,30 +9,13 @@
          url(/fonts/DroidSans.ttf) format('truetype');
 }
 
-@font-face {
-    font-family: 'Droid Sans';
-    font-style: normal;
-    font-weight: bold;
-    src: local('Droid Sans Bold'), local('DroidSans-Bold'),
-         url(/fonts/DroidSans-Bold_subset.woff) format('woff'),
-         url(/fonts/DroidSans-Bold_subset.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'fontello';
-    font-style: normal;
-    font-weight: normal;
-    src: url(/fonts/fontello.woff) format('woff'),
-         url(/fonts/fontello.ttf) format('truetype');
-}
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
 @keyframes blink {
-    50% { opacity: 0; }
+    50% { border-color: transparent; }
 }
 
 * {
@@ -70,24 +53,8 @@ body {
     color: black;
 }
 
-button {
+.button {
     cursor: pointer;
-}
-
-button, button:focus, button:hover, button:active {
-    vertical-align: baseline;
-    background: transparent;
-    font: inherit;
-    padding: 0;
-    margin: 0;
-    border: 0;
-    outline: 0;
-    color: inherit;
-}
-
-button:disabled {
-    cursor: default;
-    color: #777;
 }
 
 .highlighted {
@@ -102,11 +69,15 @@ button:disabled {
 
 .toolbar > * {
     box-sizing: border-box;
-    padding: 1%;
 }
 
 .player-0.toolbar {
     transform: scale(-1, -1);
+
+    /* to work around <https://stackoverflow.com/questions/41163227/
+    cannot-draw-on-part-of-canvas/41164642#41164642> - also on the other side */
+    padding-bottom: 1px;
+    margin-bottom: -1px;
 }
 
 .player-1.toolbar {
@@ -116,19 +87,58 @@ button:disabled {
     margin-top: -1px;
 }
 
-.toolbar .activity-indicator, .toolbar .reset {
-    width: 20%;
+.activity, .reset {
+    width: 30%;
+    padding: 2%;
 }
 
-.toolbar .score {
-    width: 60%;
+.indicator, .button {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 0;
+    border-radius: 50%;
+}
+
+.button {
+    border: 0.075em solid black;
+    width: 25%;
+    padding-bottom: 25%;
+}
+
+.indicator {
+    width: 15%;
+    padding-bottom: 15%;
+}
+
+.to-chess.button {
+    background: no-repeat center/70% url("/images/chess.svg");
+}
+
+.to-random.button {
+    background: no-repeat center/70% url("/images/random.svg");
+}
+
+.indicator {
+    margin: 0.075em;
+}
+
+.to-random.button {
+    margin-right: 10%;
+}
+
+.indicator {
+    background: black;
+}
+
+.score {
+    width: 40%;
     text-align: center;
-    font-size: 150%;
+    font-size: 180%;
+    font-family: 'Droid Sans'
 }
 
-.toolbar .reset {
+.reset {
     text-align: right;
-    font-family: 'fontello';
 }
 
 #display {
@@ -137,6 +147,7 @@ button:disabled {
     height: 0;
     padding-bottom: 100%;
     flex: none;
+    background: black;
 }
 
 canvas.tiles, canvas.arrow, canvas.rot-anim, canvas.rubber-band {
@@ -197,10 +208,4 @@ canvas.tiles, canvas.arrow, canvas.rot-anim, canvas.rubber-band {
 
 canvas.rubber-band {
     cursor: crosshair;
-}
-
-button.reset {
-    font-family: 'fontello';
-    font-weight: normal;
-    font-size: 100%;
 }

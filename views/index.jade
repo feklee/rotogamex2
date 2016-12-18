@@ -34,11 +34,12 @@ html(lang="en")
   body
     #game
       .player-0.toolbar
-        .activity-indicator o
+        .activity
+          .indicator
         .score
         .reset
-          button.to-random R
-          button.to-chess 
+          .to-random.button
+          .to-chess.button
 
       #display
         canvas(class="tiles")
@@ -47,11 +48,12 @@ html(lang="en")
         canvas(class="rubber-band")
 
       .player-1.toolbar
-        .activity-indicator o
+        .activity
+          .indicator
         .score
         .reset
-          button.to-random R
-          button.to-chess 
+          .to-random.button
+          .to-chess.button
 
     #load-screen
       div

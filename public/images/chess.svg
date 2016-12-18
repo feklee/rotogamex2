@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!--Generator: Xara Designer (www.xara.com), SVG filter version: 6.1.0.16-->
+<svg stroke-width="0.501" stroke-linejoin="bevel" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible" width="56.693pt" height="56.692pt" viewBox="0 0 56.693 56.692">
+ <defs>
+	</defs>
+ <g id="Document" fill="none" stroke="black" font-family="Times New Roman" font-size="16" transform="scale(1 -1)">
+  <g id="Spread" transform="translate(0 -56.692)">
+   <g id="Layer 1"/>
+   <g id="Chess">
+    <path d="M 0,28.346 C 8.435,28.346 16.87,28.346 25.305,28.346 C 25.832,28.346 26.359,28.346 26.886,28.346 C 27.15,28.346 27.414,28.346 27.677,28.346 C 27.809,28.346 27.941,28.346 28.072,28.346 C 28.189,28.346 28.346,28.407 28.346,28.225 C 28.346,27.17 28.346,26.116 28.346,25.062 C 28.346,22.953 28.346,20.844 28.346,18.735 C 28.346,14.518 28.346,10.3 28.346,6.083 C 28.346,4.993 28.346,3.904 28.346,2.815 C 28.346,2.27 28.346,1.725 28.346,1.181 C 28.346,0.72 28.727,-0.008 27.937,0.003 C 25.865,0.033 23.856,0.281 21.839,0.757 C 17.567,1.765 13.982,3.518 10.564,6.271 C 3.884,11.652 0,19.769 0,28.346 Z" stroke="none" fill="#000000" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" marker-start="none" marker-end="none" stroke-miterlimit="79.8403193612775"/>
+    <path d="M 0,28.346 C 0,12.691 12.691,0 28.346,0 C 28.346,9.449 28.346,18.898 28.346,28.346 C 18.897,28.346 9.448,28.346 0,28.346 Z" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" marker-start="none" marker-end="none" stroke-miterlimit="79.8403193612775"/>
+    <path d="M 56.693,28.346 C 56.693,44.001 44.001,56.692 28.346,56.692 C 28.346,47.243 28.346,37.794 28.346,28.346 C 37.795,28.346 47.244,28.346 56.693,28.346 Z" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" marker-start="none" marker-end="none" stroke-miterlimit="79.8403193612775"/>
+    <path d="M 56.693,28.346 C 48.257,28.346 39.822,28.346 31.387,28.346 C 30.86,28.346 30.333,28.346 29.806,28.346 C 29.542,28.346 29.279,28.346 29.015,28.346 C 28.883,28.346 28.751,28.346 28.62,28.346 C 28.503,28.346 28.346,28.285 28.346,28.467 C 28.346,29.522 28.346,30.576 28.346,31.63 C 28.346,33.739 28.346,35.848 28.346,37.957 C 28.346,42.174 28.346,46.392 28.346,50.609 C 28.346,51.699 28.346,52.788 28.346,53.877 C 28.346,54.422 28.346,54.967 28.346,55.511 C 28.346,55.972 27.965,56.7 28.755,56.689 C 30.827,56.659 32.837,56.411 34.854,55.935 C 39.125,54.927 42.71,53.174 46.128,50.421 C 52.808,45.04 56.693,36.923 56.693,28.346 Z" stroke="none" fill="#000000" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" marker-start="none" marker-end="none" stroke-miterlimit="79.8403193612775"/>
+   </g>
+  </g>
+ </g>
+</svg>

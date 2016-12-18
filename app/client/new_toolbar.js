@@ -6,15 +6,16 @@ define(["board", "players"], function (board, players) {
     "use strict";
 
     var resetButtonEl = function (internal, type) {
-        return internal.toolbarEl.querySelector(".reset button.to-" + type);
+        return internal.toolbarEl.querySelector(".reset .to-" + type +
+                                                ".button");
     };
 
     var activityIndicatorEl = function (internal) {
-        return internal.toolbarEl.querySelector(".activity-indicator");
+        return internal.toolbarEl.querySelector(".activity .indicator");
     };
 
     var resetButtonEls = function (internal) {
-        return internal.toolbarEl.querySelectorAll(".reset button");
+        return internal.toolbarEl.querySelectorAll(".reset .button");
     };
 
     var clearReset = function (internal) {
@@ -63,11 +64,12 @@ define(["board", "players"], function (board, players) {
     };
 
     var updateActivityIndicator = function (internal) {
+        var el = activityIndicatorEl(internal);
         console.log(board.isFinished);
         if (board.isFinished || internal.player !== players.active) {
-            activityIndicatorEl(internal).classList.remove("highlighted");
+            el.style.visibility = "hidden";
         } else {
-            activityIndicatorEl(internal).classList.add("highlighted");
+            el.style.visibility = "visible";
         }
     };
 
