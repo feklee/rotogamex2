@@ -44,16 +44,9 @@ define([
     var toolbars = [];
     toolbars.push(newToolbar(players[0]));
     toolbars.push(newToolbar(players[1]));
-    board.onResetToChess = function () {
-        toolbars.forEach(function (toolbar) {
-            toolbar.onReset();
-        });
-        tilesCanvas.requestRender();
-    };
-    board.onResetToRandom = function () {
-        toolbars.forEach(function (toolbar) {
-            toolbar.onReset(); // TODO: still does not work if several highlights active / one click should deactivate the other anyhow / also allow disabling
-        });
+    toolbars[0].otherToolbar = toolbars[1];
+    toolbars[1].otherToolbar = toolbars[0];
+    board.onReset = function () {
         tilesCanvas.requestRender();
     };
 

@@ -5,108 +5,109 @@
 define(["board", "players"], function (board, players) {
     "use strict";
 
-    var resetToChessButtonEl = function (toolbarEl) {
-        return toolbarEl.querySelector(".reset button.to-chess");
+    var resetButtonEl = function (internal, type) {
+        return internal.toolbarEl.querySelector(".reset button.to-" + type);
     };
 
-    var resetToRandomButtonEl = function (toolbarEl) {
-        return toolbarEl.querySelector(".reset button.to-random");
+    var activityIndicatorEl = function (internal) {
+        return internal.toolbarEl.querySelector(".activity-indicator");
     };
 
-    var activityIndicatorEl = function (toolbarEl) {
-        return toolbarEl.querySelector(".activity-indicator");
+    var resetButtonEls = function (internal) {
+        return internal.toolbarEl.querySelectorAll(".reset button");
     };
 
-    var onResetToChessClick = function (player) {
-        var otherPlayer = players[1 - player.number];
-        player.isRequestingResetToChess = true;
-        if (otherPlayer.isRequestingResetToChess) {
-            board.resetToChess();
-            player.isRequestingResetToChess = false;
-            otherPlayer.isRequestingResetToChess = false;
-        } else {
-            otherPlayer.askForResetToChess();
+    var clearReset = function (internal) {
+        if (internal.selectedResetType !== undefined) {
+            delete internal.selectedResetType;
         }
-        player.isRequestingResetToRandom = false;
-        otherPlayer.isRequestingResetToRandom = false;
-    };
-
-    var onResetToRandomClick = function (player) {
-        var otherPlayer = players[1 - player.number];
-        player.isRequestingResetToRandom = true;
-        if (otherPlayer.isRequestingResetToRandom) {
-            board.resetToRandom();
-            player.isRequestingResetToRandom = false;
-            otherPlayer.isRequestingResetToRandom = false;
-        } else {
-            otherPlayer.askForResetToRandom();
-        }
-        player.isRequestingResetToChess = false;
-        otherPlayer.isRequestingResetToChess = false;
-    };
-
-    var setUpResetToChessButton = function (toolbarEl, player) {
-        resetToChessButtonEl(toolbarEl).addEventListener("click", function () {
-            onResetToChessClick(player);
+        resetButtonEls(internal).forEach(function (el) {
+            el.classList.remove("highlighted");
         });
     };
 
-    var setUpResetToRandomButton = function (toolbarEl, player) {
-        resetToRandomButtonEl(toolbarEl).addEventListener("click", function () {
-            onResetToRandomClick(player);
-        });
+    var highlightResetButton = function (internal, type) {
+        clearReset(internal);
+        resetButtonEl(internal, type).classList.add("highlighted");
     };
 
-    var onActivityChanged = function (toolbarEl, player) {
-        if (player.isActive) {
-            activityIndicatorEl(toolbarEl).classList.add("highlighted");
+    var onResetButtonClick = function (internal, type) {
+        if (internal.otherToolbar === undefined) {
+            return;
+        }
+
+        if (internal.selectedResetType === type) {
+            console.log("fixme 2: already selected");
+            clearReset(internal);
+            internal.otherToolbar.clearReset();
+            return;
+        }
+
+        if (internal.otherToolbar.selectedResetType === type) {
+            board.resetTo(type);
+            clearReset(internal);
+            internal.otherToolbar.clearReset();
+            return;
+        }
+
+        internal.otherToolbar.highlightResetButton(type);
+        internal.selectedResetType = type;
+    };
+
+    var setUpResetButton = function (internal, type) {
+        resetButtonEl(internal, type).addEventListener(
+            "click",
+            function () {
+                onResetButtonClick(internal, type);
+            }
+        );
+    };
+
+    var onActivityChanged = function (internal) {
+        if (internal.player.isActive) {
+            activityIndicatorEl(internal).classList.add("highlighted");
         } else {
-            activityIndicatorEl(toolbarEl).classList.remove("highlighted");
+            activityIndicatorEl(internal).classList.remove("highlighted");
         }
     };
 
-    var renderScore = function (toolbarEl, player) {
-        var el = toolbarEl.querySelector(".score");
-        el.innerHTML = player.score;
-    };
-
-    var onAskForResetToChess = function (toolbarEl) {
-        resetToChessButtonEl(toolbarEl).classList.add("highlighted");
-    };
-
-    var onAskForResetToRandom = function (toolbarEl) {
-        resetToRandomButtonEl(toolbarEl).classList.add("highlighted");
-    };
-
-    var onReset = function (toolbarEl) {
-        resetToChessButtonEl(toolbarEl).classList.remove("highlighted");
-        resetToRandomButtonEl(toolbarEl).classList.remove("highlighted");
+    var renderScore = function (internal) {
+        var el = internal.toolbarEl.querySelector(".score");
+        el.innerHTML = internal.player.score;
     };
 
     return function (player) {
-        var toolbarEl = document.querySelector(".player-" + player.number +
-                                               ".toolbar");
+        var internal = {
+            player: player,
+            toolbarEl: document.querySelector(".player-" + player.number +
+                                              ".toolbar")
+        };
+        internal.toolbarEl.style.background = player.color;
 
-        setUpResetToChessButton(toolbarEl, player);
-        setUpResetToRandomButton(toolbarEl, player);
-        toolbarEl.style.background = player.color;
-        renderScore(toolbarEl, player);
-        player.onIncreaseScore = function () {
-            renderScore(toolbarEl, player);
+        setUpResetButton(internal, "chess");
+        setUpResetButton(internal, "random");
+        renderScore(internal);
+        internal.player.onIncreaseScore = function () {
+            renderScore(internal);
         };
-        player.onAskForResetToChess = function () {
-            onAskForResetToChess(toolbarEl);
-        };
-        player.onAskForResetToRandom = function () {
-            onAskForResetToRandom(toolbarEl);
-        };
-        player.onActivityChanged = function () {
-            onActivityChanged(toolbarEl, player);
+        internal.player.onActivityChanged = function () {
+            clearReset(internal);
+            internal.otherToolbar.clearReset();
+            onActivityChanged(internal);
         }
 
         return Object.create(null, {
-            onReset: {value: function () {
-                onReset(toolbarEl);
+            otherToolbar: {set: function (x) {
+                internal.otherToolbar = x;
+            }},
+            selectedResetType: {get: function () {
+                return internal.selectedResetType;
+            }},
+            clearReset: {value: function () {
+                clearReset(internal);
+            }},
+            highlightResetButton: {value: function (type) {
+                highlightResetButton(internal, type);
             }}
         });
     };

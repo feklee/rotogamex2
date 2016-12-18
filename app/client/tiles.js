@@ -247,8 +247,16 @@ define(["players"], function (players) {
 
     var tiles = Object.create([], {
         rotate: {value: rotate},
-        resetToChess: {value: initWithChess},
-        resetToRandom: {value: initWithRandom},
+        resetTo: {value: function (type) {
+            switch (type) {
+            case "chess":
+                initWithChess();
+                break;
+            case "random":
+                initWithRandom();
+                break;
+            }
+        }},
         allAreFixed: {value: allAreFixed},
         markAllAsFixed: {value: markAllAsFixed}
     });

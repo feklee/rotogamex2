@@ -2,16 +2,12 @@
 
 /*global define */
 
-define(function () { // TODO: ["board"], function (board) {
+define(function () {
     "use strict";
 
     return function (spec) {
         var score = 0;
         var onIncreaseScore = function () {};
-        var isRequestingResetToChess = false;
-        var isRequestingResetToRandom = false;
-        var onAskForResetToChess = function () {};
-        var onAskForResetToRandom = function () {};
         var onActivityChanged = function () {};
         var isActive = false;
 
@@ -35,17 +31,6 @@ define(function () { // TODO: ["board"], function (board) {
             score: {get: function () {
                 return score;
             }},
-// TODO            isRequestingReset + type?
-            isRequestingResetToChess: {get: function () {
-                return isRequestingResetToChess;
-            }, set: function (x) {
-                isRequestingResetToChess = x;
-            }},
-            isRequestingResetToRandom: {get: function () {
-                return isRequestingResetToRandom;
-            }, set: function (x) {
-                isRequestingResetToRandom = x;
-            }},
             makeActive: {value: function () {
                 isActive = true;
                 onActivityChanged();
@@ -54,19 +39,8 @@ define(function () { // TODO: ["board"], function (board) {
                 return isActive;
             }},
             onActivityChanged: {set: function (x) {
+                console.log("fixmeset");
                 onActivityChanged = x;
-            }},
-            onAskForResetToChess: {set: function (x) {
-                onAskForResetToChess = x;
-            }},
-            onAskForResetToRandom: {set: function (x) {
-                onAskForResetToRandom = x;
-            }},
-            askForResetToChess: {value: function () {
-                onAskForResetToChess();
-            }},
-            askForResetToRandom: {value: function () {
-                onAskForResetToRandom();
             }}
         });
     };

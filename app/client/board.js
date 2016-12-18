@@ -11,26 +11,11 @@ define(["tiles"], function (tiles) {
     var lastRotation = null;
     var numberOfRotation = 0;
     var sideLenT = tiles.length;
-    var onResetToChess = function () {};
-    var onResetToRandom = function () {};
-
-    // Updates `isFinished`.
-    var updateIsFinished = function () {
-        isFinished = false;
-
-        // TODO: also consider draw when finishing
-    };
-
-    var onReset = function () {
-        lastRotation = null;
-        isFinished = false;
-        numberOfRotation = 0;
-    };
+    var onReset = function () {};
 
     return Object.create(null, {
         rotate: {value: function (rotation) {
             tiles.rotate(rotation);
-            updateIsFinished();
             lastRotation = rotation;
             numberOfRotation += 1;
         }},
@@ -47,16 +32,11 @@ define(["tiles"], function (tiles) {
             return sideLenT;
         }},
 
-        resetToChess: {value: function () {
-            tiles.resetToChess();
+        resetTo: {value: function (type) {
+            tiles.resetTo(type);
+            lastRotation = null;
+            numberOfRotation = 0;
             onReset();
-            onResetToChess();
-        }},
-
-        resetToRandom: {value: function () {
-            tiles.resetToRandom();
-            onReset();
-            onResetToRandom();
         }},
 
         isFinished: {get: function () {
@@ -71,12 +51,8 @@ define(["tiles"], function (tiles) {
             return name;
         }},
 
-        onResetToChess: {set: function (x) {
-            onResetToChess = x;
-        }},
-
-        onResetToRandom: {set: function (x) {
-            onResetToRandom = x;
+        onReset: {set: function (x) {
+            onReset = x;
         }}
     });
 });
