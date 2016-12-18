@@ -251,6 +251,8 @@ define([
         if (gameIsFinished) {
             tiles.markAllAsFixed();
         }
+
+        players.activateOther();
     };
 
     return Object.create(tilesCanvas, {

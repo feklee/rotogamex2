@@ -8,8 +8,6 @@ define(function () {
     return function (spec) {
         var score = 0;
         var onIncreaseScore = function () {};
-        var onActivityChanged = function () {};
-        var isActive = false;
 
         return Object.create(null, {
             increaseScore: {value: function () {
@@ -30,17 +28,6 @@ define(function () {
             }},
             score: {get: function () {
                 return score;
-            }},
-            makeActive: {value: function () {
-                isActive = true;
-                onActivityChanged();
-            }},
-            isActive: {get: function () {
-                return isActive;
-            }},
-            onActivityChanged: {set: function (x) {
-                console.log("fixmeset");
-                onActivityChanged = x;
             }}
         });
     };

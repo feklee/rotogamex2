@@ -90,7 +90,8 @@ define(["board", "players"], function (board, players) {
         internal.player.onIncreaseScore = function () {
             renderScore(internal);
         };
-        internal.player.onActivityChanged = function () {
+        players.onActivePlayerChange = function () {
+            console.log("active change");
             clearReset(internal);
             internal.otherToolbar.clearReset();
             onActivityChanged(internal);
