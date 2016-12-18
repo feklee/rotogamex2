@@ -109,6 +109,13 @@ button:disabled {
     transform: scale(-1, -1);
 }
 
+.player-1.toolbar {
+    /* to work around <https://stackoverflow.com/questions/41163227/
+       cannot-draw-on-part-of-canvas/41164642#41164642 */
+    padding-top: 1px;
+    margin-top: -1px;
+}
+
 .toolbar .activity-indicator, .toolbar .reset {
     width: 20%;
 }
