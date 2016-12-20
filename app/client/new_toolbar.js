@@ -65,7 +65,6 @@ define(["board", "players"], function (board, players) {
 
     var updateActivityIndicator = function (internal) {
         var el = activityIndicatorEl(internal);
-        console.log(board.isFinished);
         if (board.isFinished || internal.player !== players.active) {
             el.style.visibility = "hidden";
         } else {

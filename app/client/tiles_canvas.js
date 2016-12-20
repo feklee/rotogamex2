@@ -203,9 +203,10 @@ define([
 
     // Triggers a rotation animation that is shown when the canvas is first
     // displayed. This rotation serves as a hint concerning how the game works.
-    var triggerInitialRotAnim = function () { // TODO: doesn't show
+    var triggerInitialRotAnim = function () {
         var initialRotation = rotationFactory.create(
-            rectTFactory.create([0, 0], [tiles.widthT - 1, tiles.heightT - 1]),
+            rectTFactory.create([0, 0],
+                                [tiles.sideLenT - 1, tiles.sideLenT - 1]),
             true
         );
         rotAnimCanvas.startAnim(initialRotation);

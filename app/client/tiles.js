@@ -258,7 +258,10 @@ define(["players"], function (players) {
             }
         }},
         allAreFixed: {value: allAreFixed},
-        markAllAsFixed: {value: markAllAsFixed}
+        markAllAsFixed: {value: markAllAsFixed},
+        sideLenT: {get: function () {
+            return sideLenT;
+        }}
     });
 
     initWithChess();
