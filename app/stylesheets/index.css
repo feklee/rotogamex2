@@ -1,14 +1,3 @@
-@import 'reset.css';
-
-@font-face {
-    font-family: 'Droid Sans';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Droid Sans'), local('DroidSans'),
-         url(/fonts/DroidSans.woff) format('woff'),
-         url(/fonts/DroidSans.ttf) format('truetype');
-}
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -40,7 +29,6 @@ html {
 
 body {
     position: relative;
-    font-family: 'Droid Sans', sans-serif;
     background: black;
 }
 
@@ -143,8 +131,8 @@ body {
 .score {
     width: 40%;
     text-align: center;
-    font-size: 180%;
-    font-family: 'Droid Sans'
+    font-size: 200%;
+    font-family: "Source Sans Pro";
 }
 
 .reset {

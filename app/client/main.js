@@ -6,7 +6,7 @@
 
 define([
     "display", "util", "players", "new_toolbar", "board",
-    "tiles_canvas", "vendor/rAF"
+    "tiles_canvas"
 ], function (display, util, players, newToolbar, board, tilesCanvas) {
     "use strict";
 

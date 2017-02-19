@@ -1,13 +1,12 @@
 {
-  "name": "rotogamesq",
+  "name": "rotogamex2",
   "version": "1.0.0",
   "author": "Felix E. Klee <felix.klee@inka.de>",
   "subdomain": "rotogamex2",
   "domains": [
     "x2.rotogame.com"
   ],
-  "description":
-    "ROTOGAMEx2 is a two player game inspired by squared bathroom tiles.",
+  "description": "ROTOGAMEx2 is a two player game inspired by squared bathroom tiles.",
   "scripts": {
     "start": "node app.js"
   },

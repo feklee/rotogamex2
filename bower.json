@@ -1,0 +1,22 @@
+{
+  "name": "rotogamex2",
+  "description": "ROTOGAMEx2 is a two player game inspired by squared bathroom tiles.",
+  "main": "app.js",
+  "authors": [
+    "Felix E. Klee <felix.klee@inka.de>"
+  ],
+  "license": "WTFPL",
+  "homepage": "https://github.com/feklee/rotogamex2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "source-sans-pro": "git://github.com/adobe-fonts/source-sans-pro.git#2.020R-ro/1.075R-it",
+    "requirejs": "2.x",
+    "reset-css": "*"
+  }
+}

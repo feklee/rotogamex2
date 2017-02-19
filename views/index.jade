@@ -13,9 +13,14 @@ html(lang="en")
     //- For displaying an image when sharing on Facebook, for example.
     link(rel="image_src", href="/images/icon_256.png")
 
+    link(rel="stylesheet",
+         href="components/reset-css/reset.css")
+    link(rel="stylesheet",
+         href="components/source-sans-pro/source-sans-pro.css")
     if env == 'development'
       link(rel="stylesheet", href="/app/stylesheets/index.css")
-      script(data-main="/app/client/main", src="/app/client/vendor/require.js")
+      script(data-main="/app/client/main",
+             src="components/requirejs/require.js")
     else
       link(rel="stylesheet", href="/app.build/stylesheets/index.css")
       script(src="/app.build/client/main.js", async)
